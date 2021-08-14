@@ -7,18 +7,9 @@ namespace Bg.StateMachine
     public class BaseNode
     {
         private BaseState State;
-        private bool isUpdate = true;
         private CancellationTokenSource cancellationTokenSource;
 
-        public bool IsUpdate
-        {
-            get => isUpdate;
-            set
-            {
-                isUpdate = value;
-                State.IsUpdate = isUpdate;
-            }
-        }
+        public bool IsUpdate { get; set; } = true;
 
         public List<BaseCondition> Conditions = new List<BaseCondition>();
 
@@ -64,6 +55,11 @@ namespace Bg.StateMachine
             }
 
             return null;
+        }
+
+        public bool IsMatchAnyCondition()
+        {
+            return CheckCondition() != null;
         }
 
         public void Stop()

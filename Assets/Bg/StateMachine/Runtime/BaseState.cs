@@ -6,7 +6,12 @@ namespace Bg.StateMachine
 {
     public class BaseState
     {
-        public bool IsUpdate = true;
+        protected BaseNode baseNode;
+
+        public void Init(BaseNode baseNode)
+        {
+            this.baseNode = baseNode;
+        }
         
         public virtual async UniTask OnEnter(CancellationToken ct = default)
         {
