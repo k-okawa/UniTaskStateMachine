@@ -9,7 +9,6 @@ namespace Bg.StateMachine
         private BaseState State;
         private bool isUpdate = true;
         private CancellationTokenSource cancellationTokenSource;
-        private CancellationTokenSource updateCancellationTokenSource;
 
         public bool IsUpdate
         {
@@ -26,18 +25,20 @@ namespace Bg.StateMachine
         public async UniTask<BaseNode> Start()
         {
             cancellationTokenSource?.Dispose();
-            updateCancellationTokenSource?.Dispose();
             cancellationTokenSource = new CancellationTokenSource();
-            updateCancellationTokenSource = new CancellationTokenSource();
-            
+
             await State.OnEnter(cancellationTokenSource.Token);
-            State.OnUpdate(updateCancellationTokenSource.Token).Forget();
+            bool isFinishUpdate = false;
+            State.OnUpdate(cancellationTokenSource.Token).ContinueWith(() =>
+            {
+                isFinishUpdate = true;
+            }).Forget();
             BaseCondition nextCondition = null;
             while (true)
             {
                 await UniTask.DelayFrame(1, cancellationToken: cancellationTokenSource.Token);
                 await UniTask.WaitUntil(() => IsUpdate, cancellationToken: cancellationTokenSource.Token);
-                if (updateCancellationTokenSource.IsCancellationRequested)
+                if (isFinishUpdate)
                 {
                     nextCondition = CheckCondition();
                     break;
@@ -48,7 +49,6 @@ namespace Bg.StateMachine
                     break;
                 }
             }
-            updateCancellationTokenSource?.Dispose();
             await State.OnExit(cancellationTokenSource.Token);
             return nextCondition?.NextNode;
         }
@@ -69,7 +69,6 @@ namespace Bg.StateMachine
         public void Stop()
         {
             cancellationTokenSource?.Dispose();
-            updateCancellationTokenSource?.Dispose();
         }
 
         public void Pause()
