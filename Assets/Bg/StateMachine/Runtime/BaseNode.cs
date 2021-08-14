@@ -18,6 +18,7 @@ namespace Bg.StateMachine
             cancellationTokenSource?.Dispose();
             cancellationTokenSource = new CancellationTokenSource();
 
+            State.Init(this);
             await State.OnEnter(cancellationTokenSource.Token);
             bool isFinishUpdate = false;
             State.OnUpdate(cancellationTokenSource.Token).ContinueWith(() =>

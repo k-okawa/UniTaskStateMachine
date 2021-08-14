@@ -23,7 +23,7 @@ namespace Bg.StateMachine.Tests
 
             public override async UniTask OnUpdate(CancellationToken ct = default)
             {
-                await UniTask.Delay(TimeSpan.FromSeconds(1f));
+                await UniTask.DelayFrame(1);
                 GameManager.isInit = true;
             }
 
@@ -52,7 +52,7 @@ namespace Bg.StateMachine.Tests
             {
                 UnityEngine.Debug.Log($"Boss Hp = {GameManager.bossHp}");
                 
-                while (true)
+                while (!baseNode.IsMatchAnyCondition())
                 {
                     await UniTask.Delay(TimeSpan.FromSeconds(0.5f), cancellationToken: ct);
                     GameManager.bossHp -= 10;
