@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Bg.StateMachine.Editor
 {
@@ -20,5 +21,20 @@ namespace Bg.StateMachine.Editor
             get => this.dragSettings.DragOffset;
             set => this.dragSettings.DragOffset = value;
         }
+        
+        [System.NonSerialized]
+        private StateMachineBehaviour stateMachine = new StateMachineBehaviour();
+
+        public StateMachineBehaviour StateMachine
+        {
+            get => stateMachine;
+        }
+
+        public Graph Graph
+        {
+            get => stateMachine.Graph;
+        }
+
+        public List<GraphNode> SelectedNodes { get; } = new List<GraphNode>();
     }
 }

@@ -1,0 +1,109 @@
+﻿using UnityEngine;
+using UnityEditor;
+
+namespace Bg.StateMachine.Editor
+{
+    public class GraphNodeLayer : GraphLayer
+    {
+        private readonly StateStyles stateStyles;
+
+        private bool isDragging = false;
+
+        public GraphNodeLayer(EditorWindow editorWindow) : base(editorWindow)
+        {
+            this.stateStyles = new StateStyles();
+        }
+
+        public override void Draw(Rect rect)
+        {
+            base.Draw(rect);
+            DrawNodes(rect);
+        }
+
+        private void DrawNodes(Rect rect)
+        {
+            stateStyles.ApplyZoomFactor(Context.ZoomFactor);
+
+            var graph = Context.Graph;
+
+            foreach (var node in graph.Nodes)
+            {
+                Rect nodeRect = GetTransformedRect(node.Rect);
+
+                if (rect.Overlaps(nodeRect))
+                {
+                    DrawNode(node, nodeRect);
+                }
+            }
+        }
+
+        private void DrawNode(GraphNode node, Rect rect)
+        {
+            string nodeName = node.ID;
+            GUI.Box(rect, nodeName, stateStyles.Get(StateStyles.Style.Green));
+        }
+
+        protected override void OnLeftMouseButtonEvent(Vector2 mousePos)
+        {
+            switch (Event.current.type)
+            {
+                case EventType.MouseDown:
+                {
+                    isDragging = false;
+
+                    var node = Context.Graph.GetClickedNode(this, mousePos);
+
+                    if (node != null)
+                    {
+                        if (!Context.SelectedNodes.Contains(node))
+                        {
+                            this.Context.SelectedNodes.Clear();
+                            this.Context.SelectedNodes.Add(node);
+                        }
+                    }
+                    
+                    Event.current.Use();
+                    
+                    break;
+                }
+
+                case EventType.MouseDrag:
+                {
+                    if (!isDragging)
+                    {
+                        isDragging = true;
+                    }
+                    else
+                    {
+                        if (Context.SelectedNodes.Count > 0)
+                        {
+                            Event.current.Use();
+                            GUI.changed = true;
+                        }
+
+                        foreach (var node in Context.SelectedNodes)
+                        {
+                            Rect rect = node.Rect;
+
+                            rect.x += Event.current.delta.x / this.Context.ZoomFactor;
+                            rect.y += Event.current.delta.y / this.Context.ZoomFactor;
+
+                            node.Rect = rect;
+                        }
+                    }
+
+                    break;
+                }
+
+                case EventType.MouseUp:
+                {
+                    if (isDragging)
+                    {
+                        isDragging = false;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+}

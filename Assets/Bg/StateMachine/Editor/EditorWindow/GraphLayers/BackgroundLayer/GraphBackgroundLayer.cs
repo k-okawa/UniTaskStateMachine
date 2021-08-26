@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 
 namespace Bg.StateMachine.Editor
 {
@@ -6,7 +7,17 @@ namespace Bg.StateMachine.Editor
     public class GraphBackgroundLayer : GraphLayer
     {
         public GraphBackgroundLayer(EditorWindow view) : base(view) {}
-        
+
+        protected override void OnRightMouseButtonEvent(Vector2 mousePos)
+        {
+            if (Event.current.type == EventType.MouseUp)
+            {
+                IContextMenu contextMenu = new GraphContextMenu(EditorWindow, mousePos);
+                contextMenu.Show();
+                Event.current.Use();
+            }
+        }
+
         protected override void OnMiddleMouseButtonEvent(Vector2 mousePos)
         {
             switch (Event.current.type)
