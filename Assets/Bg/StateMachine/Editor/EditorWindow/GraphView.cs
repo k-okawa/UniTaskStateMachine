@@ -20,7 +20,7 @@ namespace Bg.StateMachine.Editor
 
         public void Repaint(Rect rect)
         {
-            EditorGUI.DrawRect(rect, GraphColors.BackgroundColor);
+            EditorGUI.DrawRect(rect, GraphEnvironment.BackgroundColor);
 
             for (int i = 0; i < this.Layers.Count; i++)
             {

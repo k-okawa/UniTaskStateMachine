@@ -28,7 +28,7 @@ namespace Bg.StateMachine.Editor
             while (dictionary.ContainsKey(res))
             {
                 stringBuilder.Clear();
-                stringBuilder.Append(baseName).Append(" ").Append(x);
+                stringBuilder.Append(baseName).Append($"({x})");
                 res = stringBuilder.ToString();
                 x++;
             }

@@ -48,7 +48,7 @@ namespace Bg.StateMachine.Editor
             {
                 border = new RectOffset(10, 10, 10, 10),
                 alignment = TextAnchor.MiddleCenter,
-                fontSize = 12,
+                fontSize = 20,
                 fontStyle = FontStyle.Bold,
                 contentOffset = new Vector2(0, -3)
             };
@@ -63,7 +63,7 @@ namespace Bg.StateMachine.Editor
         {
             foreach (GUIStyle style in styleDictionary.Values)
             {
-                style.fontSize = Mathf.RoundToInt(10 * zoomFactor);
+                style.fontSize = Mathf.RoundToInt(20 * zoomFactor);
                 style.contentOffset = new Vector2(0, -3.0f * zoomFactor);
             }
         }

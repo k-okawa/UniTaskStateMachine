@@ -39,8 +39,8 @@ namespace Bg.StateMachine.Editor
         {
             if (Event.current.type == EventType.Repaint)
             {
-                DrawGrid(12, GraphColors.OuterGridColor, rect.width, rect.height);
-                DrawGrid(120, GraphColors.InnerGridColor, rect.width, rect.height);
+                DrawGrid(GraphEnvironment.GraphGridSpace, GraphEnvironment.OuterGridColor, rect.width, rect.height);
+                DrawGrid(GraphEnvironment.GraphGridSpace * 10f, GraphEnvironment.InnerGridColor, rect.width, rect.height);
             } 
         }
         

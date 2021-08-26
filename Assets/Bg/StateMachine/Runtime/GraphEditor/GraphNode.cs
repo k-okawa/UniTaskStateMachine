@@ -7,8 +7,8 @@ namespace Bg.StateMachine
     [System.Serializable]
     public class GraphNode
     {
-        private static readonly int Width = 120;
-        private static readonly int Height = 60;
+        private static readonly int Width = 300;
+        private static readonly int Height = 100;
 
         [SerializeField] private Vector2 position;
         

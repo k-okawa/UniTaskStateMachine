@@ -57,8 +57,8 @@ namespace Bg.StateMachine.Editor
                     {
                         if (!Context.SelectedNodes.Contains(node))
                         {
-                            this.Context.SelectedNodes.Clear();
-                            this.Context.SelectedNodes.Add(node);
+                            Context.SelectedNodes.Clear();
+                            Context.SelectedNodes.Add(node);
                         }
                     }
                     
@@ -75,6 +75,14 @@ namespace Bg.StateMachine.Editor
                     }
                     else
                     {
+                        var graphRect = EditorWindow.Rect;
+                        graphRect.yMin += EditorStyles.toolbar.fixedHeight;
+                        if (!graphRect.Contains(mousePos))
+                        {
+                            isDragging = false;
+                            break;
+                        }
+                        
                         if (Context.SelectedNodes.Count > 0)
                         {
                             Event.current.Use();
@@ -101,6 +109,7 @@ namespace Bg.StateMachine.Editor
                     {
                         isDragging = false;
                     }
+                    Context.SelectedNodes.Clear();
                     break;
                 }
             }
