@@ -46,22 +46,19 @@ namespace Bg.StateMachine.Tests
             public override async UniTask OnEnter(CancellationToken ct = default)
             {
                 UnityEngine.Debug.Log("Play Start");
+                UnityEngine.Debug.Log($"Boss Hp = {GameManager.bossHp}");
             }
 
             public override async UniTask OnUpdate(CancellationToken ct = default)
             {
-                UnityEngine.Debug.Log($"Boss Hp = {GameManager.bossHp}");
-                
-                while (!baseNode.IsMatchAnyCondition())
+                await UniTask.Delay(TimeSpan.FromSeconds(0.5f), cancellationToken: ct);
+                GameManager.bossHp -= 10;
+                if (GameManager.bossHp < 0)
                 {
-                    await UniTask.Delay(TimeSpan.FromSeconds(0.5f), cancellationToken: ct);
-                    GameManager.bossHp -= 10;
-                    if (GameManager.bossHp < 0)
-                    {
-                        GameManager.bossHp = 0;
-                    }
-                    UnityEngine.Debug.Log($"Boss Hp = {GameManager.bossHp}");
+                    GameManager.bossHp = 0;
                 }
+
+                UnityEngine.Debug.Log($"Boss Hp = {GameManager.bossHp}");
             }
 
             public override async UniTask OnExit(CancellationToken ct = default)

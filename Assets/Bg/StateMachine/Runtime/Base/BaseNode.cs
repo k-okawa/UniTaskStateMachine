@@ -20,21 +20,17 @@ namespace Bg.StateMachine
 
             State.Init(this);
             await State.OnEnter(cancellationTokenSource.Token);
-            bool isFinishUpdate = false;
-            State.OnUpdate(cancellationTokenSource.Token).ContinueWith(() =>
+            if (Conditions.Count <= 0)
             {
-                isFinishUpdate = true;
-            }).Forget();
+                await State.OnExit(cancellationTokenSource.Token);
+                return null;
+            }
             BaseCondition nextCondition = null;
             while (true)
             {
                 await UniTask.DelayFrame(1, cancellationToken: cancellationTokenSource.Token);
                 await UniTask.WaitUntil(() => IsUpdate, cancellationToken: cancellationTokenSource.Token);
-                if (isFinishUpdate)
-                {
-                    nextCondition = CheckCondition();
-                    break;
-                }
+                await State.OnUpdate(cancellationTokenSource.Token);
                 nextCondition = CheckCondition();
                 if (nextCondition != null)
                 {
@@ -42,7 +38,7 @@ namespace Bg.StateMachine
                 }
             }
             await State.OnExit(cancellationTokenSource.Token);
-            return nextCondition?.NextNode;
+            return nextCondition.NextNode;
         }
 
         private BaseCondition CheckCondition()
