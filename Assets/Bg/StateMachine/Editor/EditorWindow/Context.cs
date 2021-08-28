@@ -36,5 +36,14 @@ namespace Bg.StateMachine.Editor
         }
 
         public List<GraphNode> SelectedNodes { get; } = new List<GraphNode>();
+
+        [System.NonSerialized]
+        private GraphNode transitionPreview = null;
+        
+        public GraphNode TransitionPreview
+        {
+            get => transitionPreview;
+            set => transitionPreview = value;
+        }
     }
 }

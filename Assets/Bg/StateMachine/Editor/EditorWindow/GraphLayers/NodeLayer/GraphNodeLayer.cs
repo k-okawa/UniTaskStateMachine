@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Bg.StateMachine.Editor.Commands;
+using UnityEngine;
 using UnityEditor;
 
 namespace Bg.StateMachine.Editor
@@ -40,7 +41,16 @@ namespace Bg.StateMachine.Editor
         private void DrawNode(GraphNode node, Rect rect)
         {
             string nodeName = node.ID;
-            GUI.Box(rect, nodeName, stateStyles.Get(StateStyles.Style.Green));
+
+            var style = StateStyles.Style.Normal;
+
+            bool isSelected = Context.SelectedNodes.Contains(node);
+            if (node is GraphState state)
+            {
+                style = isSelected ? StateStyles.Style.NormalOn : StateStyles.Style.Normal;
+            }
+            
+            GUI.Box(rect, nodeName, stateStyles.Get(style));
         }
 
         protected override void OnLeftMouseButtonEvent(Vector2 mousePos)
@@ -55,6 +65,15 @@ namespace Bg.StateMachine.Editor
 
                     if (node != null)
                     {
+                        if (Context.TransitionPreview != null && Context.TransitionPreview != node)
+                        {
+                            if (node is GraphState state)
+                            {
+                                Context.StateMachine.AddTransition(Context.TransitionPreview, state);
+                                Context.TransitionPreview = null;
+                            }
+                        }
+                        
                         if (!Context.SelectedNodes.Contains(node))
                         {
                             Context.SelectedNodes.Clear();
@@ -88,14 +107,14 @@ namespace Bg.StateMachine.Editor
                             Event.current.Use();
                             GUI.changed = true;
                         }
-
+                    
                         foreach (var node in Context.SelectedNodes)
                         {
                             Rect rect = node.Rect;
-
+                    
                             rect.x += Event.current.delta.x / this.Context.ZoomFactor;
                             rect.y += Event.current.delta.y / this.Context.ZoomFactor;
-
+                    
                             node.Rect = rect;
                         }
                     }
@@ -112,6 +131,28 @@ namespace Bg.StateMachine.Editor
                     Context.SelectedNodes.Clear();
                     break;
                 }
+            }
+        }
+
+        protected override void OnRightMouseButtonEvent(Vector2 mousePos)
+        {
+            var node = Context.Graph.GetClickedNode(this, mousePos);
+
+            if (node != null)
+            {
+                ICommand command = null;
+
+                switch (Event.current.type)
+                {
+                    case EventType.MouseDown:
+                        command = new SelectClickedStateCommand(Context, node);
+                        break;
+                    case EventType.MouseUp:
+                        isDragging = false;
+                        command = new ShowContextMenuCommand(Context, node);
+                        break;
+                }
+                command?.Execute();
             }
         }
     }

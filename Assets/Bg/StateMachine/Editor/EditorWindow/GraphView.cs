@@ -15,6 +15,7 @@ namespace Bg.StateMachine.Editor
             this.Context = editorWindow.Context;
             
             this.Layers.Add(new GraphBackgroundLayer(editorWindow));
+            this.Layers.Add(new GraphTransitionLayer(editorWindow));
             this.Layers.Add(new GraphNodeLayer(editorWindow));
         }
 

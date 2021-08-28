@@ -9,5 +9,11 @@ namespace Bg.StateMachine.Editor.Commands
             ICommand command = new AddStateCommand(stateMachine, position);
             command.Execute();
         }
+
+        public static void AddTransition(this StateMachineBehaviour stateMachine, GraphNode origin, GraphState target)
+        {
+            ICommand command = new AddTransitionCommand(stateMachine, origin, target);
+            command.Execute();
+        }
     }
 }

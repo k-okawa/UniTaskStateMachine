@@ -16,6 +16,7 @@ namespace Bg.StateMachine.Editor
         
         private void OnEnable()
         {
+            wantsMouseMove = true;
             this.editorWindowGUI = new EditorWindowGUI(this);
         }
 

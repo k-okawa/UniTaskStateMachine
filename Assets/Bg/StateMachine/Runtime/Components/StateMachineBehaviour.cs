@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 
-// MonoBehaviourを継承させるが、いったん継承を外している
-
 namespace Bg.StateMachine
 {
     [DefaultExecutionOrder(-1)]
