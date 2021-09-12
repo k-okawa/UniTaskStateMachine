@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using Bg.StateMachine.Editor.Commands;
+using UnityEditor;
 using UnityEngine;
 
 namespace Bg.StateMachine.Editor.ContextMenus
@@ -19,7 +20,13 @@ namespace Bg.StateMachine.Editor.ContextMenus
             var genericMenu = new GenericMenu();
             genericMenu.AddItem(new GUIContent("Make Transition"), false, () =>
             {
-                this.context.TransitionPreview = this.state;
+                context.TransitionPreview = this.state;
+            });
+            genericMenu.AddSeparator("");
+            genericMenu.AddItem(new GUIContent("Delete"), false, () =>
+            {
+                context.SelectedNodes.Clear();
+                context.StateMachine.DeleteNode(this.state);
             });
             genericMenu.ShowAsContext();
         }

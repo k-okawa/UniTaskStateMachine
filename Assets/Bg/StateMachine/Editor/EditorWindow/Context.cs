@@ -45,5 +45,13 @@ namespace Bg.StateMachine.Editor
             get => transitionPreview;
             set => transitionPreview = value;
         }
+
+        [System.NonSerialized]
+        public GraphSelection GraphSelection;
+
+        public Context()
+        {
+            GraphSelection = new GraphSelection(this);
+        }
     }
 }

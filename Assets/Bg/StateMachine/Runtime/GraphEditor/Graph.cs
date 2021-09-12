@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Bg.StateMachine
 {
@@ -8,6 +9,15 @@ namespace Bg.StateMachine
     {
         [NonSerialized]
         private GraphCache cache = new GraphCache();
+        
+        [SerializeField] 
+        private string entryState = string.Empty;
+
+        public string EntryStateId
+        {
+            get => this.entryState;
+            set => this.entryState = value;
+        }
 
         public IList<GraphNode> Nodes => cache.Nodes;
 
@@ -16,6 +26,8 @@ namespace Bg.StateMachine
         public bool TryAddNode(GraphNode node) => cache.TryAddNode(node);
 
         public bool TryGetNode(string id, out GraphNode node) => cache.TryGetNode(id, out node);
+
+        public bool TryRemoveNode(GraphNode node) => cache.TryRemoveNode(node);
 
         public bool TryGetTransition(string id, out GraphTransition transition) => cache.TransitionDictionary.TryGetValue(id, out transition);
 

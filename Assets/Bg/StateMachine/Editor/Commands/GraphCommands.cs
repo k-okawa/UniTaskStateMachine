@@ -15,5 +15,11 @@ namespace Bg.StateMachine.Editor.Commands
             ICommand command = new AddTransitionCommand(stateMachine, origin, target);
             command.Execute();
         }
+
+        public static void DeleteNode(this StateMachineBehaviour stateMachine, GraphNode node)
+        {
+            ICommand command = new DeleteNodeCommand(stateMachine, node);
+            command.Execute();
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Bg.StateMachine.Editor.ContextMenus;
+﻿﻿using Bg.StateMachine.Editor.ContextMenus;
 using UnityEngine;
 
 namespace Bg.StateMachine.Editor.Commands

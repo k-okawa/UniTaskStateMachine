@@ -60,6 +60,7 @@ namespace Bg.StateMachine.Editor
                 case EventType.MouseDown:
                 {
                     isDragging = false;
+                    Context.SelectedNodes.Clear();
 
                     var node = Context.Graph.GetClickedNode(this, mousePos);
 
@@ -76,7 +77,6 @@ namespace Bg.StateMachine.Editor
                         
                         if (!Context.SelectedNodes.Contains(node))
                         {
-                            Context.SelectedNodes.Clear();
                             Context.SelectedNodes.Add(node);
                         }
                     }
@@ -128,7 +128,6 @@ namespace Bg.StateMachine.Editor
                     {
                         isDragging = false;
                     }
-                    Context.SelectedNodes.Clear();
                     break;
                 }
             }
@@ -153,6 +152,15 @@ namespace Bg.StateMachine.Editor
                         break;
                 }
                 command?.Execute();
+            }
+        }
+
+        protected override void OnKeyUp(KeyCode keyCode)
+        {
+            if (keyCode == KeyCode.Delete)
+            {
+                Context.GraphSelection.Delete();
+                EditorWindow.Repaint();
             }
         }
     }

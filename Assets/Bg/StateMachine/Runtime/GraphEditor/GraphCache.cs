@@ -43,5 +43,17 @@ namespace Bg.StateMachine
 
             return false;
         }
+
+        public bool TryRemoveNode(GraphNode node)
+        {
+            if (NodeDictionary.ContainsKey(node.ID))
+            {
+                Nodes.Remove(node);
+                NodeDictionary.Remove(node.ID);
+                return true;
+            }
+
+            return false;
+        }
     }
 }

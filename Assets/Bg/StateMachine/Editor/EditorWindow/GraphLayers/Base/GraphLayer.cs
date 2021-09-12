@@ -73,6 +73,19 @@ namespace Bg.StateMachine.Editor
                     OnScrollWheelMoved();
                 }
             }
+
+            if (currentEvent.isKey)
+            {
+                switch (currentEvent.type)
+                {
+                    case EventType.KeyDown:
+                        OnKeyDown(currentEvent.keyCode);
+                        break;
+                    case EventType.KeyUp:
+                        OnKeyUp(currentEvent.keyCode);
+                        break;
+                }
+            }
         }
         
         // events
@@ -83,6 +96,9 @@ namespace Bg.StateMachine.Editor
         protected virtual void OnMiddleMouseButtonEvent(Vector2 mousePos) { }
 
         protected virtual void OnScrollWheelMoved() { }
+        
+        protected virtual void OnKeyDown(KeyCode keyCode) { }
+        protected virtual void OnKeyUp(KeyCode keyCode) { }
         
         /// <summary>
         /// Computes and returns a transformed version of a given rect by applying the current offset and the zoom factor.
