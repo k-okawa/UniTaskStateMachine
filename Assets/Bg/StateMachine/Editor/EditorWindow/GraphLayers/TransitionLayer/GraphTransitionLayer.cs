@@ -118,9 +118,57 @@ namespace Bg.StateMachine.Editor
             }
         }
 
+        public GraphTransition GetClickedTransition(Vector2 mousePos)
+        {
+            float maxDistance = 5f * Context.ZoomFactor;
+
+            var graph = Context.Graph;
+
+            foreach (var transition in graph.Transitions)
+            {
+                if (TryGetTransitionNodes(transition, out GraphNode originNode, out GraphNode targetNode))
+                {
+                    Rect originRect = GetTransformedRect(originNode.Rect);
+                    Rect targetRect = GetTransformedRect(targetNode.Rect);
+
+                    Vector2 a = originRect.center;
+                    Vector2 c = targetRect.center;
+                    
+                    Line transitionLine = new Line(a, c);
+                    
+                    Rect rect = new Rect()
+                    {
+                        x = Mathf.Min(a.x, c.x) - maxDistance,
+                        y = Mathf.Min(a.y, c.y) - maxDistance,
+                        width = Mathf.Max(a.x, c.x) - Mathf.Min(a.x, c.x) + 2 * maxDistance,
+                        height = Mathf.Max(a.y, c.y) - Mathf.Min(a.y, c.y) + 2 * maxDistance
+                    };
+
+                    if (rect.Contains(mousePos))
+                    {
+                        if (transitionLine.GetMinDistance(mousePos) < maxDistance)
+                        {
+                            return transition;
+                        }
+                    }
+                }
+            }
+
+            return null;
+        }
+
         protected override void OnLeftMouseButtonEvent(Vector2 mousePos)
         {
-            
+            switch (Event.current.type)
+            {
+                case EventType.MouseDown:
+                    GraphTransition transition = GetClickedTransition(mousePos);
+                    if (transition != null)
+                    {
+
+                    }
+                    break;
+            }
         }
 
         protected override void OnRightMouseButtonEvent(Vector2 mousePos)
@@ -136,6 +184,22 @@ namespace Bg.StateMachine.Editor
                 }
 
                 return;
+            }
+
+            GraphTransition transition = GetClickedTransition(mousePos);
+
+            if (transition == null)
+            {
+                return;
+            }
+
+            switch (Event.current.type)
+            {
+                case EventType.MouseUp:
+                    Event.current.Use();
+                    IContextMenu contextMenu = new TransitionContextMenu(Context.StateMachine, transition);
+                    contextMenu.Show();
+                    break;
             }
         }
 

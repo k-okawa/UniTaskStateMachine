@@ -14,6 +14,11 @@ namespace Bg.StateMachine.Editor
             Start = start;
             End = end;
         }
+
+        public float GetMinDistance(Vector2 point)
+        {
+            return GetMinDistanceToLine(point, this);
+        }
         
         public Vector2 Lerp(float t)
         {
@@ -62,6 +67,15 @@ namespace Bg.StateMachine.Editor
             }
 
             return false;
+        }
+
+        private static float GetMinDistanceToLine(Vector2 point, Line line)
+        {
+            Vector2 v = line.Direction;
+            Vector2 w = point - line.Start;
+            Vector2 distance = w - (1.0f / v.magnitude) * Vector2.Dot(v, w) * (v / v.magnitude);
+
+            return distance.magnitude;
         }
     }
 }

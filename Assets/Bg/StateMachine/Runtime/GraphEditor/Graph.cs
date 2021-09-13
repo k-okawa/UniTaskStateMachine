@@ -32,5 +32,7 @@ namespace Bg.StateMachine
         public bool TryGetTransition(string id, out GraphTransition transition) => cache.TransitionDictionary.TryGetValue(id, out transition);
 
         public bool TryAddTransition(GraphTransition transition) => cache.TryAddTransition(transition);
+
+        public bool TryRemoveTransition(GraphTransition transition) => cache.TryRemoveTransition(transition);
     }
 }

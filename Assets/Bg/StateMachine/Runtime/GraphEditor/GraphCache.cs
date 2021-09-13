@@ -55,5 +55,24 @@ namespace Bg.StateMachine
 
             return false;
         }
+
+        public bool TryRemoveTransition(GraphTransition transition)
+        {
+            bool success = false;
+
+            if (TransitionDictionary.ContainsKey(transition.ID))
+            {
+                TransitionDictionary.Remove(transition.ID);
+                success = true;
+            }
+
+            if (Transitions.Contains(transition))
+            {
+                Transitions.Remove(transition);
+                success = true;
+            }
+
+            return success;
+        }
     }
 }
