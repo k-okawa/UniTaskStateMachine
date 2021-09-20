@@ -69,7 +69,7 @@ namespace Bg.StateMachine.Editor
         {
             if (TryGetTransitionNodes(transition, out GraphNode originNode, out GraphNode targetNode))
             {
-                Color color = Color.white;
+                Color color = GetTransitionColor(transition);
 
                 Rect startRect = GetTransformedRect(originNode.Rect);
 
@@ -77,6 +77,16 @@ namespace Bg.StateMachine.Editor
 
                 DrawTransition(startRect.center, endRect, color);
             }
+        }
+
+        private Color GetTransitionColor(GraphTransition transition)
+        {
+            if (Selection.activeObject == TransitionInspectorHelper.Instance && TransitionInspectorHelper.Instance.TransitionID == transition.ID)
+            {
+                return GraphEnvironment.SelectionColor;
+            }
+
+            return Color.white;
         }
 
         private void DrawTransition(Vector2 startPos, Rect end, Color color)
@@ -165,7 +175,9 @@ namespace Bg.StateMachine.Editor
                     GraphTransition transition = GetClickedTransition(mousePos);
                     if (transition != null)
                     {
-
+                        Context.SelectedNodes.Clear();
+                        TransitionInspectorHelper.Instance.Inspect(Context.StateMachine, transition);
+                        Event.current.Use();
                     }
                     break;
             }
@@ -173,19 +185,6 @@ namespace Bg.StateMachine.Editor
 
         protected override void OnRightMouseButtonEvent(Vector2 mousePos)
         {
-            if (Context.TransitionPreview != null)
-            {
-                switch (Event.current.type)
-                {
-                    case EventType.MouseUp:
-                        Context.TransitionPreview = null;
-                        Event.current.Use();
-                        break;
-                }
-
-                return;
-            }
-
             GraphTransition transition = GetClickedTransition(mousePos);
 
             if (transition == null)

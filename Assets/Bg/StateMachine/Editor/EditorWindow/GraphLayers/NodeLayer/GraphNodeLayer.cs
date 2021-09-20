@@ -79,10 +79,10 @@ namespace Bg.StateMachine.Editor
                         {
                             Context.SelectedNodes.Add(node);
                         }
+                        
+                        Event.current.Use();
                     }
-                    
-                    Event.current.Use();
-                    
+
                     break;
                 }
 

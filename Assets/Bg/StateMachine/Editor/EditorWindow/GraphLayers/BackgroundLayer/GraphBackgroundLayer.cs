@@ -8,6 +8,21 @@ namespace Bg.StateMachine.Editor
     {
         public GraphBackgroundLayer(EditorWindow view) : base(view) {}
 
+        protected override void OnLeftMouseButtonEvent(Vector2 mousePos)
+        {
+            switch (Event.current.type)
+            {
+                case EventType.MouseDown:
+                {
+                    Selection.activeObject = null;
+                    Context.SelectedNodes.Clear();
+                    Event.current.Use();
+                    Context.TransitionPreview = null;
+                    break;
+                }
+            }
+        }
+
         protected override void OnRightMouseButtonEvent(Vector2 mousePos)
         {
             if (Event.current.type == EventType.MouseUp)
