@@ -15,7 +15,7 @@ namespace Bg.StateMachine
 
         public async UniTask<BaseNode> Start()
         {
-            cancellationTokenSource?.Dispose();
+            cancellationTokenSource?.Cancel();
             cancellationTokenSource = new CancellationTokenSource();
 
             State.Init(this);
@@ -61,7 +61,7 @@ namespace Bg.StateMachine
 
         public void Stop()
         {
-            cancellationTokenSource?.Dispose();
+            cancellationTokenSource?.Cancel();
         }
 
         public void Pause()

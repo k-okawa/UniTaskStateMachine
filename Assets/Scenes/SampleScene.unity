@@ -243,12 +243,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   graph:
-    states: []
+    states:
+    - position: {x: 305.57153, y: 31.942894}
+      id: State
+    - position: {x: 869.343, y: 39.485687}
+      id: State(1)
+    - position: {x: 543.5, y: 258.9}
+      id: State(2)
     preferences:
       zoomSettings:
-        zoomFactor: 0.7
+        zoomFactor: 0.6666664
       dragSettings:
-        dragOffset: {x: 0, y: 0}
+        dragOffset: {x: 212.85712, y: -2.8571422}
     entryState: 
 --- !u!4 &854791542
 Transform:
