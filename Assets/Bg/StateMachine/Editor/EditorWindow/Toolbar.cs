@@ -12,6 +12,7 @@ namespace Bg.StateMachine.Editor
         {
             this.elements = new List<ToolbarElement>()
             {
+                new StateMachineField(editorWindow),
                 new ZoomSlider(editorWindow)
             };
         }

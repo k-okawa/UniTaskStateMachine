@@ -13,6 +13,11 @@ namespace Bg.StateMachine.Editor
 
         public override void OnGUI(Rect rect)
         {
+            if (!Context.IsStateMachineLoaded)
+            {
+                return;
+            }
+            
             EditorGUI.BeginDisabledGroup(false);
             {
                 var zoomSliderRect = new Rect((rect.width - this.Width - 50) + 40, rect.y, this.Width, rect.height);

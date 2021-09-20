@@ -4,7 +4,7 @@ namespace Bg.StateMachine
 {
     [DefaultExecutionOrder(-1)]
     [DisallowMultipleComponent]
-    public class StateMachineBehaviour
+    public class StateMachineBehaviour : MonoBehaviour
     {
         [SerializeField]
         private Graph graph = new Graph();

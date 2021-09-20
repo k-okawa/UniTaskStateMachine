@@ -21,6 +21,11 @@ namespace Bg.StateMachine.Editor
 
         public void Repaint(Rect rect)
         {
+            if (!Context.IsStateMachineLoaded)
+            {
+                return;
+            }
+            
             EditorGUI.DrawRect(rect, GraphEnvironment.BackgroundColor);
 
             for (int i = 0; i < this.Layers.Count; i++)
@@ -31,6 +36,11 @@ namespace Bg.StateMachine.Editor
 
         public void ProcessEvents(Rect rect)
         {
+            if (!Context.IsStateMachineLoaded)
+            {
+                return;
+            }
+            
             for (int i = this.Layers.Count - 1; i >= 0; i--)
             {
                 this.Layers[i].ProcessEvents(Event.current.mousePosition);

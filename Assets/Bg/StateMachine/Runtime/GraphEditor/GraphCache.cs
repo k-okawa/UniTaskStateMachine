@@ -15,6 +15,80 @@ namespace Bg.StateMachine
         
         public Dictionary<string, GraphNode> NodeDictionary { get; } = new Dictionary<string, GraphNode>();
 
+        public void SerializeCache(Graph graph)
+        {
+            Graph.SerializedData serializedData = new Graph.SerializedData(graph);
+            
+            serializedData.States.Clear();
+            foreach (var node in Nodes)
+            {
+                if (node is GraphState state)
+                {
+                    serializedData.States.Add(state);
+                }
+            }
+            
+            serializedData.Transitions.Clear();
+            foreach (var transition in Transitions)
+            {
+                serializedData.Transitions.Add(transition);
+            }
+        }
+
+        public void BuildCache(Graph graph)
+        {
+            Graph.SerializedData serializedData = new Graph.SerializedData(graph);
+            
+            CacheNodes(serializedData);
+            CacheTransitions(serializedData);
+            BuildNodeDictionary();
+            BuildTransitionDictionary();
+        }
+
+        void CacheNodes(Graph.SerializedData serializedData)
+        {
+            Nodes.Clear();
+
+            foreach (var node in serializedData.States)
+            {
+                Nodes.Add(node);
+            }
+        }
+
+        void CacheTransitions(Graph.SerializedData serializedData)
+        {
+            Transitions.Clear();
+
+            foreach (var transition in serializedData.Transitions)
+            {
+                Transitions.Add(transition);
+            }
+        }
+
+        void BuildNodeDictionary()
+        {
+            NodeDictionary.Clear();
+
+            foreach (var node in Nodes)
+            {
+                if (NodeDictionary.ContainsKey(node.ID) == false)
+                {
+                    NodeDictionary.Add(node.ID, node);
+                }
+            }
+        }
+
+        void BuildTransitionDictionary()
+        {
+            foreach (var transition in Transitions)
+            {
+                if (TransitionDictionary.ContainsKey(transition.ID) == false)
+                {
+                    TransitionDictionary.Add(transition.ID, transition);
+                }
+            }
+        }
+
         public bool TryAddNode(GraphNode node)
         {
             if (NodeDictionary.ContainsKey(node.ID) == false)

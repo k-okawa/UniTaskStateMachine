@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace Bg.StateMachine.Editor
@@ -8,6 +9,8 @@ namespace Bg.StateMachine.Editor
         public Context Context { get; private set; } = new Context();
         
         [System.NonSerialized] private EditorWindowGUI editorWindowGUI;
+
+        private bool IsEnabled { get; set; } = false;
         
         public Rect Rect
         {
@@ -18,11 +21,8 @@ namespace Bg.StateMachine.Editor
         {
             wantsMouseMove = true;
             this.editorWindowGUI = new EditorWindowGUI(this);
-        }
-
-        private void OnGUI()
-        {
-            this.editorWindowGUI.OnGUI();
+            Context.Reload();
+            IsEnabled = true;
         }
 
         private void Update()
@@ -32,7 +32,33 @@ namespace Bg.StateMachine.Editor
 
         private void OnInspectorUpdate()
         {
-            
+            Repaint();
+        }
+
+        private void OnHierarchyChange()
+        {
+            Context.Reload();
+        }
+
+        private void OnSelectionChange()
+        {
+            if (IsEnabled)
+            {
+                Context.UpdateSelection();
+            }
+        }
+
+        private void OnFocus()
+        {
+            if (IsEnabled)
+            {
+                Context.Reload();
+            }
+        }
+
+        private void OnGUI()
+        {
+            this.editorWindowGUI.OnGUI();
         }
     }
 }

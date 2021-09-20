@@ -5,8 +5,17 @@ using UnityEngine;
 namespace Bg.StateMachine
 {
     [System.Serializable]
-    public class Graph
+    public class Graph : ISerializationCallbackReceiver
     {
+        [SerializeField]
+        private List<GraphState> states = new List<GraphState>();
+        
+        [SerializeField]
+        private List<GraphTransition> transitions = new List<GraphTransition>();
+        
+        [SerializeField]
+        private Preferences preferences = new Preferences();
+        
         [NonSerialized]
         private GraphCache cache = new GraphCache();
         
@@ -22,6 +31,30 @@ namespace Bg.StateMachine
         public IList<GraphNode> Nodes => cache.Nodes;
 
         public IList<GraphTransition> Transitions => cache.Transitions;
+
+        public Preferences Preferences => preferences;
+
+        public struct SerializedData
+        {
+            public SerializedData(Graph graph)
+            {
+                States = graph.states;
+                Transitions = graph.transitions;
+            }
+
+            public List<GraphState> States { get; private set; }
+            public List<GraphTransition> Transitions { get; private set; }
+        }
+        
+        public void OnBeforeSerialize()
+        {
+            cache.SerializeCache(this);
+        }
+
+        public void OnAfterDeserialize()
+        {
+            cache.BuildCache(this);
+        }
 
         public bool TryAddNode(GraphNode node) => cache.TryAddNode(node);
 
