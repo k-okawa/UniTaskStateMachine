@@ -35,6 +35,12 @@ namespace Bg.StateMachine
             }
         }
 
+        public void RebuildDictionary()
+        {
+            BuildNodeDictionary();
+            BuildTransitionDictionary();
+        }
+
         public void BuildCache(Graph graph)
         {
             Graph.SerializedData serializedData = new Graph.SerializedData(graph);
@@ -105,6 +111,20 @@ namespace Bg.StateMachine
         {
             return NodeDictionary.TryGetValue(id, out node);
         }
+        
+        public bool TryGetState(string id, out GraphState state)
+        {
+            if (TryGetNode(id, out GraphNode node) && node is GraphState)
+            {
+                state = node as GraphState;
+                return true;
+            }
+            else
+            {
+                state = null;
+                return false;
+            }
+        }
 
         public bool TryAddTransition(GraphTransition transition)
         {
@@ -147,6 +167,21 @@ namespace Bg.StateMachine
             }
 
             return success;
+        }
+        
+        public bool HasTransition(string id)
+        {
+            return TransitionDictionary.ContainsKey(id);
+        }
+
+        public bool HasNode(string id)
+        {
+            return NodeDictionary.ContainsKey(id);
+        }
+
+        public bool HasState(string id)
+        {
+            return TryGetState(id, out _);
         }
     }
 }

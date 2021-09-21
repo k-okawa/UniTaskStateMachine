@@ -34,6 +34,8 @@ namespace Bg.StateMachine
 
         public Preferences Preferences => preferences;
 
+        public GraphCache Cache => cache;
+
         public struct SerializedData
         {
             public SerializedData(Graph graph)
@@ -67,5 +69,11 @@ namespace Bg.StateMachine
         public bool TryAddTransition(GraphTransition transition) => cache.TryAddTransition(transition);
 
         public bool TryRemoveTransition(GraphTransition transition) => cache.TryRemoveTransition(transition);
+        
+        public bool HasTransition(string id) => cache.HasTransition(id);
+        
+        public bool HasNode(string id) => cache.HasNode(id);
+        
+        public bool HasState(string id) => cache.HasState(id);
     }
 }

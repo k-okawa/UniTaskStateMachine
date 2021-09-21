@@ -35,24 +35,5 @@ namespace Bg.StateMachine.Editor
 
             return res;
         }
-
-        public static string GetUniqueTransitionId(this Graph graph)
-        {
-            int x = 1;
-
-            string res = "Transition";
-            
-            var stringBuilder = new StringBuilder();
-
-            while (graph.TryGetTransition(res, out _))
-            {
-                stringBuilder.Clear();
-                stringBuilder.Append("Transition").Append($"({x})");
-                res = stringBuilder.ToString();
-                x++;
-            }
-
-            return res;
-        }
     }
 }
