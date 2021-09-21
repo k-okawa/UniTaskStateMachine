@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 
 namespace Bg.StateMachine
 {
-    public class BaseState
+    public class BaseState : IState
     {
         protected BaseNode baseNode;
 

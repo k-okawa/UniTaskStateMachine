@@ -6,7 +6,7 @@ namespace Bg.StateMachine
 {
     public class BaseNode
     {
-        public BaseState State;
+        public IState State;
         private CancellationTokenSource cancellationTokenSource;
 
         public bool IsUpdate { get; set; } = true;
