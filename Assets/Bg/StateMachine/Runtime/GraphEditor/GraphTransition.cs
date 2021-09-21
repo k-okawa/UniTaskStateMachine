@@ -3,6 +3,7 @@ using UnityEngine.Serialization;
 
 namespace Bg.StateMachine
 {
+    [System.Serializable]
     public class GraphTransition
     {
         [SerializeField, FormerlySerializedAs("name")]
