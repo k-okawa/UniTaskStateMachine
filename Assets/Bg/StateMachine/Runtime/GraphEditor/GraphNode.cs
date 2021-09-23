@@ -12,7 +12,7 @@ namespace Bg.StateMachine
 
         [SerializeField] private Vector2 position;
         
-        [SerializeField, FormerlySerializedAs("name")]
+        [SerializeField]
         private string id = String.Empty;
 
         public string ID

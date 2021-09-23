@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Bg.StateMachine.Editor.Extensions;
 using UnityEditor;
 using UnityEngine;
@@ -12,6 +14,8 @@ namespace Bg.StateMachine.Editor
 
         private SerializedProperty serializedStateProperty = null;
         private SerializedProperty stateNameProperty = null;
+        
+        private List<string> stateComponentNames = new List<string>();
         
         private GUIContent guiContentID = new GUIContent("ID", "A unique ID that can be used to identify the state");
         
@@ -58,11 +62,34 @@ namespace Bg.StateMachine.Editor
             }
 
             var inspectorHelper = target as StateInspectorHelper;
+            var stateMachine = (serializedStateMachineObject.targetObject as StateMachineBehaviour);
             var graph = (serializedStateMachineObject.targetObject as StateMachineBehaviour).GetStateMachineGraph();
 
             if (graph.HasNode(inspectorHelper.StateID))
             {
+                serializedStateMachineObject.Update();
                 
+                EditorGUI.BeginDisabledGroup(EditorApplication.isPlaying);
+                {
+                    EditorGUILayout.LabelField("State component name");
+                    CollectStateComponent();
+                    var stateComponentProperty = serializedStateProperty.FindPropertyRelative("stateComponent");
+                    var selectedComponent = stateComponentProperty.objectReferenceValue as BaseStateComponent;
+                    int selectedIndex = 0;
+                    if (selectedComponent != null)
+                    {
+                        var selected = stateComponentNames.Select((name, index) => new {name, index})
+                            .FirstOrDefault(itr => itr.name == selectedComponent.GetType().Name);
+                        selectedIndex = selected?.index ?? 0;
+                    }
+
+                    int popupIndex = EditorGUILayout.Popup(selectedIndex, stateComponentNames.ToArray());
+                    var setComponent = stateMachine.GetComponent(stateComponentNames[popupIndex]);
+                    stateComponentProperty.objectReferenceValue = setComponent;
+                }
+                EditorGUI.EndDisabledGroup();
+
+                serializedStateMachineObject.ApplyModifiedProperties();
             }
         }
 
@@ -118,6 +145,26 @@ namespace Bg.StateMachine.Editor
                     EditorGUILayout.Space();
                     EditorGUI.EndDisabledGroup();
                 }
+            }
+        }
+
+        void CollectStateComponent()
+        {
+            stateComponentNames.Clear();
+            stateComponentNames.Add("None");
+            
+            var inspectorHelper = target as StateInspectorHelper;
+            var stateMachine = (serializedStateMachineObject.targetObject as StateMachineBehaviour);
+
+            if (inspectorHelper == null || stateMachine == null)
+            {
+                return;
+            }
+            
+            var stateComponents = stateMachine.GetComponents<BaseStateComponent>();
+            foreach (var stateComponent in stateComponents)
+            {
+                stateComponentNames.Add(stateComponent.GetType().Name);
             }
         }
     }
