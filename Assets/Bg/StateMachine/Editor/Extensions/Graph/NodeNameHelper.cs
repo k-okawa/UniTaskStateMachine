@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using Bg.StateMachine.Editor.Extensions;
+using UnityEditor;
+using UnityEngine;
 
 namespace Bg.StateMachine.Editor
 {
@@ -34,6 +37,68 @@ namespace Bg.StateMachine.Editor
             }
 
             return res;
+        }
+
+        public static bool TryRenameState(this StateMachineBehaviour stateMachine, string oldId, string id)
+        {
+            var graph = stateMachine.GetStateMachineGraph();
+
+            if (string.IsNullOrEmpty(id))
+            {
+                return false;
+            }
+
+            if (graph.TryGetNode(id, out _))
+            {
+                Debug.LogWarningFormat(ErrorMessages.TakenStateID, oldId, id);
+
+                return false;
+            }
+            
+            Undo.RegisterCompleteObjectUndo(stateMachine, "Change node id");
+            
+            UpdateTransitions(graph, oldId, id);
+            UpdateStateName(graph, oldId, id);
+
+            return true;
+        }
+        
+        private static void UpdateTransitions(Graph graph, string oldStateName, string newStateName)
+        {
+            foreach (var transition in graph.Transitions)
+            {
+                if (transition.OriginStateID == oldStateName)
+                {
+                    transition.OriginStateID = newStateName;
+                }
+
+                if (transition.TargetStateID == oldStateName)
+                {
+                    transition.TargetStateID = newStateName;
+                }
+            }
+        }
+        
+        private static void UpdateStateName(Graph graph, string oldStateName, string newStateName)
+        {
+            if(graph.TryGetNode(oldStateName, out GraphNode node))
+            {
+                var state = node as GraphState;
+
+                if(state != null)
+                {
+                    //Update entry state name of the graph
+                    if (graph.EntryStateId == oldStateName)
+                    {
+                        graph.EntryStateId = newStateName;
+                    }
+
+                    //Apply name to state
+                    state.ID = newStateName;
+
+                    graph.Cache.RebuildDictionary();
+                }
+            }
         }
     }
 }

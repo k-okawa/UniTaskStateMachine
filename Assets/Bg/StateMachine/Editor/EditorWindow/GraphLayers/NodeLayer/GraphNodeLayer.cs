@@ -77,7 +77,13 @@ namespace Bg.StateMachine.Editor
                         
                         if (!Context.SelectedNodes.Contains(node))
                         {
+                            Context.SelectedNodes.Clear();
                             Context.SelectedNodes.Add(node);
+
+                            if (node is GraphState state)
+                            {
+                                StateInspectorHelper.Instance.Inspect(Context.StateMachine, Context.Graph, state);
+                            }
                         }
                         
                         Event.current.Use();
