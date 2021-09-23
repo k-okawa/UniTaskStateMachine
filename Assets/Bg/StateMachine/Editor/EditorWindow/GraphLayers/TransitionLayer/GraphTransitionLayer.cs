@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Bg.StateMachine.Editor.Commands;
 using UnityEngine;
 using UnityEditor;
 
@@ -229,6 +230,26 @@ namespace Bg.StateMachine.Editor
             if (Context.TransitionPreview != null)
             {
                 GUI.changed = true;
+            }
+        }
+
+        protected override void OnKeyUp(KeyCode keyCode)
+        {
+            if (keyCode == KeyCode.Delete)
+            {
+                if (Context.SelectedNodes.Count == 0)
+                {
+                    if (Selection.activeObject == TransitionInspectorHelper.Instance)
+                    {
+                        var transition = TransitionInspectorHelper.Instance.Transition;
+
+                        if (Context.Graph.Transitions.Contains(transition))
+                        {
+                            Context.StateMachine.DeleteTransition(transition);
+                            Selection.activeObject = null;
+                        }
+                    }
+                }
             }
         }
     }
