@@ -64,6 +64,24 @@ namespace Bg.StateMachine.Editor
                 DrawTransition(GetTransformedRect(this.Context.TransitionPreview.Rect).center, new Rect(Event.current.mousePosition, Vector2.one), Color.white);
             }
         }
+        
+        private Vector2 GetTransitionOffset(GraphNode originNode, Rect originRect, Rect targetRect)
+        {
+            Vector2 distance = originRect.center - targetRect.center;
+
+            Vector2 offset = Vector2.zero;
+
+            if (Mathf.Abs(distance.y) > Mathf.Abs(distance.x))
+            {
+                offset.x = Mathf.Sign(distance.y) * 10.0f;
+            }
+            else
+            {
+                offset.y = Mathf.Sign(distance.x) * 10.0f;
+            }
+
+            return offset * this.Context.ZoomFactor;
+        }
 
         private void DrawTransition(GraphTransition transition)
         {
@@ -74,6 +92,10 @@ namespace Bg.StateMachine.Editor
                 Rect startRect = GetTransformedRect(originNode.Rect);
 
                 Rect endRect = GetTransformedRect(targetNode.Rect);
+
+                Vector2 offset = GetTransitionOffset(originNode, startRect, endRect);
+
+                endRect.center += offset;
 
                 DrawTransition(startRect.center, endRect, color);
             }
@@ -141,8 +163,8 @@ namespace Bg.StateMachine.Editor
                     Rect originRect = GetTransformedRect(originNode.Rect);
                     Rect targetRect = GetTransformedRect(targetNode.Rect);
 
-                    Vector2 a = originRect.center;
-                    Vector2 c = targetRect.center;
+                    Vector2 a = originRect.center + GetTransitionOffset(originNode, originRect, targetRect);
+                    Vector2 c = targetRect.center + GetTransitionOffset(originNode, originRect, targetRect);
                     
                     Line transitionLine = new Line(a, c);
                     
