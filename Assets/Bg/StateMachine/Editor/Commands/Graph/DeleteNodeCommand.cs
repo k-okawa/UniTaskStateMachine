@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using UnityEditor;
 
 namespace Bg.StateMachine.Editor
 {
@@ -15,7 +16,7 @@ namespace Bg.StateMachine.Editor
 
         public void Execute()
         {
-            //Undo.RegisterCompleteObjectUndo(stateMachine, "Remove node");
+            Undo.RegisterCompleteObjectUndo(stateMachine, "Remove node");
 
             var graph = stateMachine.Graph;
 

@@ -1,4 +1,6 @@
-﻿namespace Bg.StateMachine.Editor
+﻿using UnityEditor;
+
+namespace Bg.StateMachine.Editor
 {
     public class DeleteTransitionCommand : ICommand
     {
@@ -15,7 +17,7 @@
         {
             var graph = stateMachine.Graph;
 
-            //Undo.RegisterCompleteObjectUndo(this.stateMachine, "Remove transition");
+            Undo.RegisterCompleteObjectUndo(this.stateMachine, "Remove transition");
 
             graph.TryRemoveTransition(this.transition);
         }

@@ -32,7 +32,7 @@ namespace Bg.StateMachine.Editor
                 TargetStateID = target.ID
             };
             
-            //Undo.RegisterCompleteObjectUndo(stateMachine, "Add transition");
+            Undo.RegisterCompleteObjectUndo(stateMachine, "Add transition");
 
             graph.TryAddTransition(transition);
         }

@@ -28,7 +28,7 @@ namespace Bg.StateMachine.Editor
                 ID = graph.GetUniqueStateName()
             };
             
-            //Undo.RegisterCompleteObjectUndo(this.stateMachine, "Added node");
+            Undo.RegisterCompleteObjectUndo(this.stateMachine, "Added node");
 
             if (graph.TryAddNode(node))
             {
