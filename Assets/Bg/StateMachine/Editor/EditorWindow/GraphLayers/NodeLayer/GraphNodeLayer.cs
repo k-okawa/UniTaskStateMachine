@@ -47,7 +47,14 @@ namespace Bg.StateMachine.Editor
             bool isSelected = Context.SelectedNodes.Contains(node);
             if (node is GraphState state)
             {
-                style = isSelected ? StateStyles.Style.NormalOn : StateStyles.Style.Normal;
+                if (state.ID == Context.Graph.EntryStateId)
+                {
+                    style = isSelected ? StateStyles.Style.GreenOn : StateStyles.Style.Green;
+                }
+                else
+                {
+                    style = isSelected ? StateStyles.Style.NormalOn : StateStyles.Style.Normal;
+                }
             }
             
             GUI.Box(rect, nodeName, stateStyles.Get(style));

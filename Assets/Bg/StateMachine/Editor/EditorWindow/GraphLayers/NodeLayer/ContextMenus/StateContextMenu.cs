@@ -23,6 +23,12 @@ namespace Bg.StateMachine.Editor.ContextMenus
                 context.TransitionPreview = this.state;
             });
             genericMenu.AddSeparator("");
+            genericMenu.AddItem(new GUIContent("Set as Entry"), false, () =>
+            {
+                Undo.RegisterCompleteObjectUndo(this.context.StateMachine, "Set entry state");
+                this.context.Graph.EntryStateId = this.state.ID;
+            });
+            genericMenu.AddSeparator("");
             genericMenu.AddItem(new GUIContent("Delete"), false, () =>
             {
                 context.SelectedNodes.Clear();
