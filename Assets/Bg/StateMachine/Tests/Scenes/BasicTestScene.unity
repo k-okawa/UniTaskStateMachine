@@ -213,6 +213,129 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &854791540
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 854791542}
+  - component: {fileID: 854791541}
+  - component: {fileID: 854791543}
+  - component: {fileID: 854791546}
+  - component: {fileID: 854791545}
+  - component: {fileID: 854791544}
+  m_Layer: 0
+  m_Name: StateMachine
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &854791541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854791540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 384635cb70c3452788aaae8ff3dcac77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graph:
+    states:
+    - position: {x: 76.79545, y: 161.02707}
+      id: Start
+      stateComponent: {fileID: 854791546}
+    - position: {x: 490.23206, y: 158.96045}
+      id: Play
+      stateComponent: {fileID: 854791545}
+    - position: {x: 913.826, y: 160.99084}
+      id: End
+      stateComponent: {fileID: 854791544}
+    transitions:
+    - id: Transition
+      description: 
+      originStateID: Start
+      targetStateID: Play
+      conditionMethodName: Bg.StateMachine.Tests.BasicSceneTest.ConditionComponent/IsInitEnd
+    - id: Transition(3)
+      description: 
+      originStateID: Play
+      targetStateID: End
+      conditionMethodName: Bg.StateMachine.Tests.BasicSceneTest.ConditionComponent/IsGameEnd
+    preferences:
+      zoomSettings:
+        zoomFactor: 0.7333335
+      dragSettings:
+        dragOffset: {x: 257.5985, y: -30.184738}
+    entryState: Start
+--- !u!4 &854791542
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854791540}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &854791543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854791540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 698ed70e914129048acb03cfdc0b2b2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &854791544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854791540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d738fc9e2f4f4f85b4b6068765adf96a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &854791545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854791540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e55910279e2b4265bd1580cf63d6aee5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &854791546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854791540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60336565d33f4fd6afc84d9ae5a534ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0

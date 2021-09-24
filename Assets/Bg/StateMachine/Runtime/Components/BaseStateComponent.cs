@@ -8,22 +8,22 @@ namespace Bg.StateMachine
     {
         protected BaseNode baseNode;
         
-        public void Init(BaseNode baseNode)
+        public virtual void Init(BaseNode baseNode)
         {
             this.baseNode = baseNode;
         }
 
-        public async UniTask OnEnter(CancellationToken ct = default)
+        public virtual async UniTask OnEnter(CancellationToken ct = default)
         {
             
         }
 
-        public async UniTask OnUpdate(CancellationToken ct = default)
+        public virtual async UniTask OnUpdate(CancellationToken ct = default)
         {
             
         }
 
-        public async UniTask OnExit(CancellationToken ct = default)
+        public virtual async UniTask OnExit(CancellationToken ct = default)
         {
             
         }
