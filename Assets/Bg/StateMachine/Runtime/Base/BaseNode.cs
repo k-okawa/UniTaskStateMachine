@@ -45,7 +45,7 @@ namespace Bg.StateMachine
         {
             foreach (var condition in Conditions)
             {
-                if (condition.IsMatchCondition())
+                if (condition.ConditionCheckCallback?.Invoke() ?? false)
                 {
                     return condition;
                 }

@@ -33,14 +33,6 @@ namespace Bg.StateMachine.Tests
             }
         }
 
-        public class StartCondition : BaseCondition
-        {
-            public override bool IsMatchCondition()
-            {
-                return GameManager.isInit;
-            }
-        }
-        
         public class PlayState : BaseState
         {
             public override async UniTask OnEnter(CancellationToken ct = default)
@@ -67,14 +59,6 @@ namespace Bg.StateMachine.Tests
             }
         }
 
-        public class PlayCondition : BaseCondition
-        {
-            public override bool IsMatchCondition()
-            {
-                return GameManager.bossHp <= 0;
-            }
-        }
-        
         public class EndState : BaseState
         {
             public override async UniTask OnEnter(CancellationToken ct = default)
@@ -92,16 +76,10 @@ namespace Bg.StateMachine.Tests
             playNode.State = new PlayState();
             var endNode = new BaseNode();
             endNode.State = new EndState();
-            
-            startNode.Conditions.Add(new StartCondition()
-            {
-                NextNode = playNode
-            });
-            
-            playNode.Conditions.Add(new PlayCondition()
-            {
-                NextNode = endNode
-            });
+
+            startNode.Conditions.Add(new BaseCondition(playNode, () => GameManager.isInit));
+
+            playNode.Conditions.Add(new BaseCondition(endNode, () => GameManager.bossHp <= 0));
             
             StateMachine sm = new StateMachine();
             sm.CurrentNode = startNode;

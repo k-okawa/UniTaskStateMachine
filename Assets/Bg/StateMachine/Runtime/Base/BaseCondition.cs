@@ -1,8 +1,16 @@
-﻿namespace Bg.StateMachine
+﻿using System;
+
+namespace Bg.StateMachine
 {
-    public abstract class BaseCondition
+    public class BaseCondition
     {
-        public BaseNode NextNode;
-        public abstract bool IsMatchCondition();
+        public BaseNode NextNode { get; private set; }
+        public Func<bool> ConditionCheckCallback { get; private set; }
+
+        public BaseCondition(BaseNode nextNode, Func<bool> conditionCheckCallback)
+        {
+            this.NextNode = nextNode;
+            this.ConditionCheckCallback = conditionCheckCallback;
+        }
     }
 }
