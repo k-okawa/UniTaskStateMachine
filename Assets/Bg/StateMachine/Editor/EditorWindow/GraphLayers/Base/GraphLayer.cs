@@ -99,12 +99,19 @@ namespace Bg.StateMachine.Editor
         
         protected virtual void OnKeyDown(KeyCode keyCode) { }
         protected virtual void OnKeyUp(KeyCode keyCode) { }
-        
+
         /// <summary>
         /// Computes and returns a transformed version of a given rect by applying the current offset and the zoom factor.
         /// </summary>
-        public Rect GetTransformedRect(Rect rect)
+        public Rect GetTransformedRect(Rect rect, bool isAdjustGrid = true)
         {
+            // adjust grid
+            if (isAdjustGrid)
+            {
+                rect.x -= (rect.x % GraphEnvironment.GraphGridSpace) - (int)(GraphEnvironment.GraphGridSpace / 2);
+                rect.y -= (rect.y % GraphEnvironment.GraphGridSpace) - (int)(GraphEnvironment.GraphGridSpace / 2);
+            }
+            
             Rect result = new Rect
             {
                 position = transformMatrix.MultiplyPoint(rect.position),
