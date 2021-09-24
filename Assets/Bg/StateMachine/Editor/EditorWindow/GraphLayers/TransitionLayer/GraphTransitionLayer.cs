@@ -95,7 +95,7 @@ namespace Bg.StateMachine.Editor
                 Rect endRect = GetTransformedRect(targetNode.Rect);
 
                 Vector2 offset = GetTransitionOffset(originNode, startRect, endRect);
-
+                startRect.center += offset;
                 endRect.center += offset;
 
                 DrawTransition(startRect.center, endRect, color);
