@@ -248,13 +248,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   graph:
     states:
-    - position: {x: -56.454132, y: 140.73572}
+    - position: {x: 34.545715, y: 149.65927}
       id: Start
       stateComponent: {fileID: 854791546}
-    - position: {x: 387.52243, y: 143.45409}
+    - position: {x: 434.44067, y: 137.6258}
       id: Play
       stateComponent: {fileID: 854791545}
-    - position: {x: 774.2837, y: 146.75754}
+    - position: {x: 820.68066, y: 132.63419}
       id: End
       stateComponent: {fileID: 854791544}
     transitions:
@@ -270,9 +270,9 @@ MonoBehaviour:
       conditionMethodName: Bg.StateMachine.Tests.BasicSceneTest.ConditionComponent/IsGameEnd
     preferences:
       zoomSettings:
-        zoomFactor: 1
+        zoomFactor: 0.79999983
       dragSettings:
-        dragOffset: {x: 434.67902, y: -26.653137}
+        dragOffset: {x: 370.53925, y: 6.755946}
     entryState: Start
 --- !u!4 &854791542
 Transform:

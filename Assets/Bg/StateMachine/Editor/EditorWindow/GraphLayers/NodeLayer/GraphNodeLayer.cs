@@ -19,6 +19,7 @@ namespace Bg.StateMachine.Editor
         {
             base.Draw(rect);
             DrawNodes(rect);
+            Context.SelectionRect.Draw();
         }
 
         private void DrawNodes(Rect rect)
@@ -71,13 +72,12 @@ namespace Bg.StateMachine.Editor
                 case EventType.MouseDown:
                 {
                     isDragging = false;
-                    Context.SelectedNodes.Clear();
 
                     var node = Context.Graph.GetClickedNode(this, mousePos);
 
                     if (node != null)
                     {
-                        if (Context.TransitionPreview != null && Context.TransitionPreview != node)
+                        if (EditorApplication.isPlaying == false && Context.TransitionPreview != null && Context.TransitionPreview != node)
                         {
                             if (node is GraphState state)
                             {
@@ -85,18 +85,43 @@ namespace Bg.StateMachine.Editor
                                 Context.TransitionPreview = null;
                             }
                         }
-                        
-                        if (!Context.SelectedNodes.Contains(node))
+                        else if (EditorApplication.isPlaying == false && Event.current.control)
                         {
-                            Context.SelectedNodes.Clear();
-                            Context.SelectedNodes.Add(node);
-
-                            if (node is GraphState state)
+                            if (Context.SelectedNodes.Count > 0)
                             {
-                                StateInspectorHelper.Instance.Inspect(Context.StateMachine, Context.Graph, state);
+                                Selection.activeObject = null;
+                            }
+
+                            if (Context.SelectedNodes.Contains(node))
+                            {
+                                Context.SelectedNodes.Remove(node);
+                            }
+                            else
+                            {
+                                Context.SelectedNodes.Add(node);
                             }
                         }
-                        
+                        else
+                        {
+                            if (Context.SelectedNodes.Count < 2 || !Context.SelectedNodes.Contains(node))
+                            {
+                                Context.SelectedNodes.Clear();
+                                Context.SelectedNodes.Add(node);
+
+                                if (node is GraphState state)
+                                {
+                                    StateInspectorHelper.Instance.Inspect(Context.StateMachine, Context.Graph, state);
+                                }
+                                else
+                                {
+                                    if (Selection.activeObject == StateInspectorHelper.Instance)
+                                    {
+                                        Selection.activeObject = null;
+                                    }
+                                }
+                            }
+                        }
+
                         Event.current.Use();
                     }
 
@@ -105,34 +130,35 @@ namespace Bg.StateMachine.Editor
 
                 case EventType.MouseDrag:
                 {
-                    if (!isDragging)
+                    if (Application.isPlaying || Context.IsPrefabAsset)
                     {
-                        isDragging = true;
+                        break;
                     }
-                    else if(!EditorApplication.isPlaying && !Context.IsPrefabAsset)
+
+                    if (!Event.current.control)
                     {
-                        var graphRect = EditorWindow.Rect;
-                        graphRect.yMin += EditorStyles.toolbar.fixedHeight;
-                        if (!graphRect.Contains(mousePos))
+                        if (!isDragging)
                         {
-                            isDragging = false;
-                            break;
+                            Undo.RegisterCompleteObjectUndo(this.Context.StateMachine, "Dragged state");
+                            isDragging = true;
                         }
-                        
-                        if (Context.SelectedNodes.Count > 0)
+                        else
                         {
-                            Event.current.Use();
-                            GUI.changed = true;
-                        }
-                    
-                        foreach (var node in Context.SelectedNodes)
-                        {
-                            Rect rect = node.Rect;
-                    
-                            rect.x += Event.current.delta.x / this.Context.ZoomFactor;
-                            rect.y += Event.current.delta.y / this.Context.ZoomFactor;
-                    
-                            node.Rect = rect;
+                            if (Context.SelectedNodes.Count > 0)
+                            {
+                                Event.current.Use();
+                                GUI.changed = true;
+                            }
+
+                            foreach (var node in Context.SelectedNodes)
+                            {
+                                Rect rect = node.Rect;
+
+                                rect.x += Event.current.delta.x / this.Context.ZoomFactor;
+                                rect.y += Event.current.delta.y / this.Context.ZoomFactor;
+
+                                node.Rect = rect;
+                            }
                         }
                     }
 

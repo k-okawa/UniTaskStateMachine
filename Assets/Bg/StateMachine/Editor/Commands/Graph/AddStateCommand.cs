@@ -32,7 +32,10 @@ namespace Bg.StateMachine.Editor
 
             if (graph.TryAddNode(node))
             {
-                
+                if (graph.Nodes.Count == 1)
+                {
+                    graph.EntryStateId = node.ID;
+                }
             }
         }
     }

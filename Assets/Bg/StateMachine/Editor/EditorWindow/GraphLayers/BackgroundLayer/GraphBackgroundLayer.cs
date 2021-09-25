@@ -20,17 +20,38 @@ namespace Bg.StateMachine.Editor
 
                 return;
             }
-            
-            switch (Event.current.type)
+
+            if (Event.current.type == EventType.MouseDown)
             {
-                case EventType.MouseDown:
+                Selection.activeObject = null;
+                Context.SelectedNodes.Clear();
+                Event.current.Use();
+                Context.TransitionPreview = null;
+                Context.SelectionRect.Position = Event.current.mousePosition;
+            }
+            else if (Event.current.type == EventType.MouseDrag)
+            {
+                if (Context.SelectionRect.IsActive)
                 {
-                    Selection.activeObject = null;
-                    Context.SelectedNodes.Clear();
+                    Context.SelectionRect.Drag(Event.current.mousePosition);
                     Event.current.Use();
-                    Context.TransitionPreview = null;
-                    break;
                 }
+            }
+            else if (Event.current.type == EventType.MouseUp || Event.current.rawType == EventType.MouseUp)
+            {
+                var graph = Context.Graph;
+
+                foreach (var node in graph.Nodes)
+                {
+                    Rect transformedRect = GetTransformedRect(node.Rect);
+
+                    if (Context.SelectionRect.Contains(new Vector2(transformedRect.xMax, transformedRect.yMax)))
+                    {
+                        Context.SelectedNodes.Add(node);
+                    }
+                }
+
+                Context.SelectionRect.Reset();
             }
         }
 

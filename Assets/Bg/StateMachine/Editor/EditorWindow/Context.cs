@@ -54,6 +54,8 @@ namespace Bg.StateMachine.Editor
         public Graph Graph { get; private set; }
 
         public List<GraphNode> SelectedNodes { get; } = new List<GraphNode>();
+        
+        public SelectionRect SelectionRect { get; set; } = new SelectionRect();
 
         [System.NonSerialized]
         private GraphNode transitionPreview = null;
