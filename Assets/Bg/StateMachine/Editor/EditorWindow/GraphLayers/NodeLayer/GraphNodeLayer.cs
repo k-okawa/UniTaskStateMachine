@@ -47,7 +47,11 @@ namespace Bg.StateMachine.Editor
             bool isSelected = Context.SelectedNodes.Contains(node);
             if (node is GraphState state)
             {
-                if (state.ID == Context.Graph.EntryStateId)
+                if (Application.isPlaying && state.ID == Context.StateMachine.StateMachine.CurrentNode.Id)
+                {
+                    style = isSelected ? StateStyles.Style.OrangeOn : StateStyles.Style.Orange;
+                }
+                else if (state.ID == Context.Graph.EntryStateId)
                 {
                     style = isSelected ? StateStyles.Style.GreenOn : StateStyles.Style.Green;
                 }
@@ -105,7 +109,7 @@ namespace Bg.StateMachine.Editor
                     {
                         isDragging = true;
                     }
-                    else
+                    else if(!EditorApplication.isPlaying && !Context.IsPrefabAsset)
                     {
                         var graphRect = EditorWindow.Rect;
                         graphRect.yMin += EditorStyles.toolbar.fixedHeight;
@@ -148,6 +152,11 @@ namespace Bg.StateMachine.Editor
 
         protected override void OnRightMouseButtonEvent(Vector2 mousePos)
         {
+            if (EditorApplication.isPlaying || Context.IsPrefabAsset)
+            {
+                return;
+            }
+            
             var node = Context.Graph.GetClickedNode(this, mousePos);
 
             if (node != null)
@@ -170,6 +179,11 @@ namespace Bg.StateMachine.Editor
 
         protected override void OnKeyUp(KeyCode keyCode)
         {
+            if (EditorApplication.isPlaying || Context.IsPrefabAsset)
+            {
+                return;
+            }
+            
             if (keyCode == KeyCode.Delete)
             {
                 Context.GraphSelection.Delete();

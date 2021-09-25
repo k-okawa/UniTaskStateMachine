@@ -10,6 +10,17 @@ namespace Bg.StateMachine.Editor
 
         protected override void OnLeftMouseButtonEvent(Vector2 mousePos)
         {
+            if (EditorApplication.isPlaying || Context.IsPrefabAsset)
+            {
+                if (Event.current.type == EventType.MouseDown)
+                {
+                    Selection.activeObject = null;
+                    Context.SelectedNodes.Clear();
+                }
+
+                return;
+            }
+            
             switch (Event.current.type)
             {
                 case EventType.MouseDown:
@@ -25,6 +36,11 @@ namespace Bg.StateMachine.Editor
 
         protected override void OnRightMouseButtonEvent(Vector2 mousePos)
         {
+            if (EditorApplication.isPlaying || Context.IsPrefabAsset)
+            {
+                return;
+            }
+            
             if (Event.current.type == EventType.MouseUp)
             {
                 IContextMenu contextMenu = new GraphContextMenu(EditorWindow, mousePos);

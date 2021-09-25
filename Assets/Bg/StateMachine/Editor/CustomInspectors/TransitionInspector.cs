@@ -24,7 +24,6 @@ namespace Bg.StateMachine.Editor
 
         private void OnEnable()
         {
-            Debug.Log("OnEnable");
             var inspectorHelper = target as TransitionInspectorHelper;
 
             var stateMachine = inspectorHelper.StateMachine;
@@ -81,15 +80,13 @@ namespace Bg.StateMachine.Editor
 
                 EditorGUI.BeginDisabledGroup(EditorApplication.isPlaying);
                 {
-                    using (new EditorGUILayout.HorizontalScope())
-                    {
-                        EditorGUILayout.LabelField("Condition method");
-                        CollectMethods();
-                        var selected = conditionMethodNames.Select((name, index) => new {name, index})
-                            .FirstOrDefault(itr => itr.name == conditionMethodNameProperty.stringValue);
-                        int selectedIndex = selected?.index ?? 0;
-                        conditionMethodNameProperty.stringValue = conditionMethodNames[EditorGUILayout.Popup(selectedIndex, conditionMethodNames.ToArray())];
-                    }
+                    EditorGUILayout.LabelField("Condition method");
+                    CollectMethods();
+                    var selected = conditionMethodNames.Select((name, index) => new {name, index})
+                        .FirstOrDefault(itr => itr.name == conditionMethodNameProperty.stringValue);
+                    int selectedIndex = selected?.index ?? 0;
+                    conditionMethodNameProperty.stringValue =
+                        conditionMethodNames[EditorGUILayout.Popup(selectedIndex, conditionMethodNames.ToArray())];
                 }
                 EditorGUI.EndDisabledGroup();
                 

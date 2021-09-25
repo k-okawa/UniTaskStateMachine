@@ -208,6 +208,11 @@ namespace Bg.StateMachine.Editor
 
         protected override void OnRightMouseButtonEvent(Vector2 mousePos)
         {
+            if (EditorApplication.isPlaying || Context.IsPrefabAsset)
+            {
+                return;
+            }
+            
             GraphTransition transition = GetClickedTransition(mousePos);
 
             if (transition == null)
@@ -235,6 +240,11 @@ namespace Bg.StateMachine.Editor
 
         protected override void OnKeyUp(KeyCode keyCode)
         {
+            if (EditorApplication.isPlaying || Context.IsPrefabAsset)
+            {
+                return;
+            }
+            
             if (keyCode == KeyCode.Delete)
             {
                 if (Context.SelectedNodes.Count == 0)

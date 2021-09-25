@@ -66,6 +66,11 @@ namespace Bg.StateMachine.Editor
 
         public bool IsStateMachineLoaded => (this.stateMachine != null);
 
+        public bool IsPrefabAsset
+        {
+            get => IsStateMachineLoaded && PrefabUtility.IsPartOfAnyPrefab(StateMachine.gameObject);
+        }
+
         [System.NonSerialized]
         public GraphSelection GraphSelection;
 
