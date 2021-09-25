@@ -1,9 +1,9 @@
 {
-    "name": "com.bg.statemachine",
-    "displayName": "StateMachineForUnity",
+    "name": "com.bg.unitaskstatemachine",
+    "displayName": "UniTaskStateMachine",
     "version": "0.1.0",
     "unity": "2019.4",
-    "description": "StateMachineForUnity",
+    "description": "UniTaskStateMachine",
     "author": {
       "name": "KyoheiOkawa"
     }
