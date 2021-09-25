@@ -1,0 +1,134 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using UnityEngine;
+
+namespace Bg.UniTaskStateMachine
+{
+    [DefaultExecutionOrder(-1)]
+    [DisallowMultipleComponent]
+    public class StateMachineBehaviour : MonoBehaviour
+    {
+        [SerializeField]
+        private Graph graph = new Graph();
+
+        public Graph Graph => graph;
+        
+        public StateMachine StateMachine { get; private set; }
+
+        private void Awake()
+        {
+            StateMachine = new StateMachine();
+            if (Graph.EntryStateId == string.Empty)
+            {
+                Debug.LogError("Entry state ID not set");
+                return;
+            }
+            
+            List<BaseNode> nodes = new List<BaseNode>();
+            foreach (var node in Graph.Nodes)
+            {
+                nodes.Add(CreateNode(node));
+            }
+
+            foreach (var transition in Graph.Transitions)
+            {
+                var originNode = nodes.FirstOrDefault(itr => itr.Id == transition.OriginStateID);
+                var targetNode = nodes.FirstOrDefault(itr => itr.Id == transition.TargetStateID);
+
+                if (originNode == null || targetNode == null)
+                {
+                    continue;
+                }
+                
+                originNode.Conditions.Add(new BaseCondition(targetNode, CreateConditionFunc(transition)));
+            }
+
+            var entryNode = nodes.FirstOrDefault(itr => itr.Id == Graph.EntryStateId);
+            if (entryNode == null)
+            {
+                Debug.LogError("Entry state ID node is not found");
+                return;
+            }
+
+            StateMachine.CurrentNode = entryNode;
+        }
+
+        private void OnEnable()
+        {
+            if (StateMachine.CurrentNode != null)
+            {
+                switch (StateMachine.CurrentState)
+                {
+                    case StateMachine.State.STOP:
+                        StateMachine.Start();
+                        break;
+                    case StateMachine.State.PAUSE:
+                        StateMachine.Resume();
+                        break;
+                }
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (StateMachine.CurrentNode != null)
+            {
+                StateMachine.Pause();
+            }
+        }
+
+        private BaseNode CreateNode(GraphNode node) 
+        {
+            BaseNode retNode = new BaseNode();
+            retNode.Id = node.ID;
+
+            if (node is GraphState state)
+            {
+                BaseStateComponent stateComp;
+                if (state.StateComponent == null)
+                {
+                    if (!gameObject.TryGetComponent<BaseStateComponent>(out _))
+                    {
+                        gameObject.AddComponent<BaseStateComponent>();
+                    }
+
+                    stateComp = gameObject.GetComponent<BaseStateComponent>();
+                }
+                else
+                {
+                    stateComp = state.StateComponent;
+                }
+
+                retNode.State = stateComp;
+            }
+
+            return retNode;
+        }
+
+        private Func<bool> CreateConditionFunc(GraphTransition transition)
+        {
+            Func<bool> retFunc = () =>
+            {
+                string methodName = transition.ConditionMethodName;
+                if (methodName != string.Empty && methodName != "None")
+                {
+                    var divided = methodName.Split('/');
+                    string className = divided[0];
+                    string method = divided[1];
+                    var comp = GetComponent(className);
+                    Type type = comp.GetType();
+                    MethodInfo methodInfo = type.GetMethod(method);
+                    bool isMatch = !(methodInfo is null) && (bool)methodInfo.Invoke(comp, null);
+                    return isMatch;
+                }
+
+                Debug.LogWarningFormat("TransitionId:{0} is always return false", transition.ID);
+                return false;
+            };
+
+            return retFunc;
+        }
+    }
+}
