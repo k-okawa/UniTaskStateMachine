@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Threading;
+#if BG_USE_UNIRX_ASYNC
+using UniRx.Async;
+#else
 using Cysharp.Threading.Tasks;
+#endif
 using UnityEngine.TestTools;
 
 namespace Bg.UniTaskStateMachine.Tests
