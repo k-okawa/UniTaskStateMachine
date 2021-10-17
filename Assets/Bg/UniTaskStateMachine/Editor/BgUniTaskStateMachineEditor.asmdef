@@ -1,0 +1,17 @@
+{
+    "name": "BgUniTaskStateMachineEditor",
+    "references": [
+        "GUID:787d3bcb651fe4b4a8e1e6ff53626e4b"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

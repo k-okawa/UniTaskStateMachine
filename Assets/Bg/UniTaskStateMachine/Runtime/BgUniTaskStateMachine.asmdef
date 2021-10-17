@@ -1,0 +1,16 @@
+{
+    "name": "BgUniTaskStateMachine",
+    "references": [
+        "GUID:0c9beed27ef427b4d8403f9e5744b629",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
