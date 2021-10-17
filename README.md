@@ -24,6 +24,9 @@ Editorツールも提供しているので、簡単にステートを組むこ�
 
 (スクリプト上で組むことも可能です)
 
+![image](https://user-images.githubusercontent.com/49301086/137613577-d510a77c-0231-4e76-bf0f-a6f16a2ae506.png)
+
+
 ## インストール
 ### 依存関係
 パッケージ内でUniTaskを使用しているので、UniTaskがプロジェクト内に追加されている必要があります。
