@@ -14,8 +14,9 @@ namespace Bg.UniTaskStateMachine
 
         public List<BaseCondition> Conditions = new List<BaseCondition>();
 
-        public async UniTask<BaseNode> Start()
+        public async UniTask<BaseNode> Start() 
         {
+            IsUpdate = true;
             cancellationTokenSource?.Cancel();
             cancellationTokenSource = new CancellationTokenSource();
 
@@ -46,9 +47,18 @@ namespace Bg.UniTaskStateMachine
         {
             foreach (var condition in Conditions)
             {
-                if (condition.ConditionCheckCallback?.Invoke() ?? false)
+                if (condition.isNegative) 
                 {
-                    return condition;
+                    if (!condition.ConditionCheckCallback?.Invoke() ?? false)
+                    {
+                        return condition;
+                    }
+                } else 
+                {
+                    if (condition.ConditionCheckCallback?.Invoke() ?? false)
+                    {
+                        return condition;
+                    }
                 }
             }
 
@@ -60,8 +70,9 @@ namespace Bg.UniTaskStateMachine
             return CheckCondition() != null;
         }
 
-        public void Stop()
+        public void Stop() 
         {
+            IsUpdate = false;
             cancellationTokenSource?.Cancel();
         }
 

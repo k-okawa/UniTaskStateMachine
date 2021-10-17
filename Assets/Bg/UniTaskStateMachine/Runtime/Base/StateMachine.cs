@@ -1,4 +1,8 @@
-﻿namespace Bg.UniTaskStateMachine
+﻿using System;
+using System.Linq;
+using Cysharp.Threading.Tasks;
+
+namespace Bg.UniTaskStateMachine
 {
     public class StateMachine
     {
@@ -22,14 +26,49 @@
             CurrentState = State.START;
             while (true)
             {
-                var nextNode = await CurrentNode.Start();
-                if (nextNode == null)
+                try 
                 {
-                    CurrentState = State.STOP;
+                    var nextNode = await CurrentNode.Start();
+                    if (nextNode == null) {
+                        CurrentState = State.STOP;
+                        return;
+                    }
+                    CurrentNode = nextNode;
+                }
+                catch (OperationCanceledException e) 
+                {
                     return;
                 }
-                CurrentNode = nextNode;
             }
+        }
+
+        public async UniTask TriggerNextTransition(string transitionId) 
+        {
+            if (CurrentState != State.START) 
+            {
+                return;
+            }
+
+            if (CurrentNode == null) 
+            {
+                return;
+            }
+
+            var targetCondition = CurrentNode.Conditions.FirstOrDefault(itr => itr.TransitionId == transitionId);
+            if (targetCondition?.NextNode == null) 
+            {
+                return;
+            }
+
+            CurrentNode.IsUpdate = false;
+
+            await CurrentNode.State.OnExit();
+            
+            Stop();
+
+            CurrentNode = targetCondition.NextNode;
+            
+            Start();
         }
 
         public void Stop()

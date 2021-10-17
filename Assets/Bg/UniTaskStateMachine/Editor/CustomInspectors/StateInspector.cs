@@ -18,7 +18,8 @@ namespace Bg.UniTaskStateMachine.Editor
         private List<string> stateComponentNames = new List<string>();
         
         private GUIContent guiContentID = new GUIContent("ID", "A unique ID that can be used to identify the state");
-        
+        private GUIContent guiComponent = new GUIContent("StateComponentMenu", "State component names attached to GameObject that has StateMachineBehaviour are dropped down");
+
         public void OnEnable()
         {
             var inspectorHelper = target as StateInspectorHelper;
@@ -71,7 +72,8 @@ namespace Bg.UniTaskStateMachine.Editor
                 
                 EditorGUI.BeginDisabledGroup(EditorApplication.isPlaying);
                 {
-                    EditorGUILayout.LabelField("State component name");
+                    // StateComponentName
+                    EditorGUILayout.LabelField(guiComponent);
                     CollectStateComponent();
                     var stateComponentProperty = serializedStateProperty.FindPropertyRelative("stateComponent");
                     var selectedComponent = stateComponentProperty.objectReferenceValue as BaseStateComponent;

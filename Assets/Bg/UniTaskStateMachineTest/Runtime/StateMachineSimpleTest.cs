@@ -76,10 +76,10 @@ namespace Bg.UniTaskStateMachine.Tests
             playNode.State = new PlayState();
             var endNode = new BaseNode();
             endNode.State = new EndState();
+            
+            startNode.Conditions.Add(new BaseCondition(playNode, () => GameManager.isInit, "IsStart"));
 
-            startNode.Conditions.Add(new BaseCondition(playNode, () => GameManager.isInit));
-
-            playNode.Conditions.Add(new BaseCondition(endNode, () => GameManager.bossHp <= 0));
+            playNode.Conditions.Add(new BaseCondition(endNode, () => GameManager.bossHp <= 0, "IsEnd"));
             
             StateMachine sm = new StateMachine();
             sm.CurrentNode = startNode;

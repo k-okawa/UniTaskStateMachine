@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Bg.UniTaskStateMachine
 {
@@ -20,6 +19,9 @@ namespace Bg.UniTaskStateMachine
 
         [SerializeField] 
         private string conditionMethodName = string.Empty;
+
+        [SerializeField] 
+        private bool isNegative = false;
         
         public string ID
         {
@@ -49,6 +51,12 @@ namespace Bg.UniTaskStateMachine
         {
             get => conditionMethodName;
             set => conditionMethodName = value;
+        }
+
+        public bool IsNegative 
+        {
+            get => isNegative;
+            set => isNegative = value;
         }
     }
 }

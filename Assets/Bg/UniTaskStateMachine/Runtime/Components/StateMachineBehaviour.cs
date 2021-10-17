@@ -42,7 +42,9 @@ namespace Bg.UniTaskStateMachine
                     continue;
                 }
                 
-                originNode.Conditions.Add(new BaseCondition(targetNode, CreateConditionFunc(transition)));
+                originNode.Conditions.Add(new BaseCondition(targetNode, CreateConditionFunc(transition), transition.ID) {
+                    isNegative = transition.IsNegative
+                });
             }
 
             var entryNode = nodes.FirstOrDefault(itr => itr.Id == Graph.EntryStateId);
@@ -79,6 +81,12 @@ namespace Bg.UniTaskStateMachine
             }
         }
 
+        private void OnDestroy() {
+            if (StateMachine.CurrentNode != null) {
+                StateMachine.Stop();
+            }
+        }
+
         private BaseNode CreateNode(GraphNode node) 
         {
             BaseNode retNode = new BaseNode();
@@ -86,22 +94,17 @@ namespace Bg.UniTaskStateMachine
 
             if (node is GraphState state)
             {
-                BaseStateComponent stateComp;
-                if (state.StateComponent == null)
+                IState iState;
+                if (state.StateComponent == null) 
                 {
-                    if (!gameObject.TryGetComponent<BaseStateComponent>(out _))
-                    {
-                        gameObject.AddComponent<BaseStateComponent>();
-                    }
-
-                    stateComp = gameObject.GetComponent<BaseStateComponent>();
+                    iState = new BaseState();
                 }
                 else
                 {
-                    stateComp = state.StateComponent;
+                    iState = state.StateComponent;
                 }
 
-                retNode.State = stateComp;
+                retNode.State = iState;
             }
 
             return retNode;
@@ -123,8 +126,7 @@ namespace Bg.UniTaskStateMachine
                     bool isMatch = !(methodInfo is null) && (bool)methodInfo.Invoke(comp, null);
                     return isMatch;
                 }
-
-                Debug.LogWarningFormat("TransitionId:{0} is always return false", transition.ID);
+                
                 return false;
             };
 

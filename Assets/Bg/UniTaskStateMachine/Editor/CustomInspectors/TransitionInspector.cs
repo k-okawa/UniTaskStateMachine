@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Bg.UniTaskStateMachine.Editor.Extensions;
@@ -16,11 +15,14 @@ namespace Bg.UniTaskStateMachine.Editor
         private SerializedObject serializedStateMachineObject = null;
 
         private SerializedProperty conditionMethodNameProperty = null;
+        private SerializedProperty isNegativeProperty = null;
         
         private List<string> conditionMethodNames = new List<string>();
         
         private GUIContent guiContentDesc = new GUIContent("Desc", "Transition description");
         private GUIContent guiContentID = new GUIContent("ID", "A unique ID that can be used to identify the transition");
+        private GUIContent guiMethod = new GUIContent("MethodName", "Functions returns bool included GameObject that has StateMachineBehaviour are dropped down");
+        private GUIContent guiIsNegative = new GUIContent("IsNegative", "Whether to invert the result");
 
         private void OnEnable()
         {
@@ -43,6 +45,7 @@ namespace Bg.UniTaskStateMachine.Editor
                         var elementProperty = stateArray.GetArrayElementAtIndex(i);
                         
                         conditionMethodNameProperty = elementProperty.FindPropertyRelative("conditionMethodName");
+                        isNegativeProperty = elementProperty.FindPropertyRelative("isNegative");
                         
                         return;
                     }
@@ -80,13 +83,18 @@ namespace Bg.UniTaskStateMachine.Editor
 
                 EditorGUI.BeginDisabledGroup(EditorApplication.isPlaying);
                 {
-                    EditorGUILayout.LabelField("Condition method");
+                    // ConditionMethod
+                    EditorGUILayout.LabelField(guiMethod);
                     CollectMethods();
                     var selected = conditionMethodNames.Select((name, index) => new {name, index})
                         .FirstOrDefault(itr => itr.name == conditionMethodNameProperty.stringValue);
                     int selectedIndex = selected?.index ?? 0;
                     conditionMethodNameProperty.stringValue =
                         conditionMethodNames[EditorGUILayout.Popup(selectedIndex, conditionMethodNames.ToArray())];
+                    
+                    // IsNegative
+                    EditorGUILayout.Space();
+                    isNegativeProperty.boolValue = EditorGUILayout.Toggle(guiIsNegative, isNegativeProperty.boolValue);
                 }
                 EditorGUI.EndDisabledGroup();
                 
