@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+#if BG_USE_UNIRX_ASYNC
+using UniRx.Async;
+#else
 using Cysharp.Threading.Tasks;
+#endif
 using UnityEngine;
 
 namespace Bg.UniTaskStateMachine
