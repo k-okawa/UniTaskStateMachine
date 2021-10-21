@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 #if BG_USE_UNIRX_ASYNC
 using UniRx.Async;
 #else
@@ -20,6 +21,13 @@ namespace Bg.UniTaskStateMachine
         public BaseNode CurrentNode;
         public State CurrentState { get; private set; } = State.STOP;
         public PlayerLoopTiming LoopTiming = PlayerLoopTiming.Update;
+
+        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
+        ~StateMachine() 
+        {
+            cancellationTokenSource.Cancel();
+        }
 
         public async void Start()
         {
@@ -60,25 +68,27 @@ namespace Bg.UniTaskStateMachine
                 return;
             }
 
-            if (CurrentNode == null) 
+            if (CurrentNode == null)
             {
                 return;
             }
 
             var targetCondition = CurrentNode.Conditions.FirstOrDefault(itr => itr.TransitionId == transitionId);
-            if (targetCondition?.NextNode == null) 
+            if (targetCondition?.NextNode == null)
             {
                 return;
             }
 
             CurrentNode.IsUpdate = false;
 
-            await CurrentNode.State.OnExit();
-            
+            await CurrentNode.State.OnExit(cancellationTokenSource.Token);
+
             Stop();
 
+            await UniTask.WaitUntil(() => CurrentState == State.STOP, cancellationToken: cancellationTokenSource.Token);
+
             CurrentNode = targetCondition.NextNode;
-            
+
             Start();
         }
 
@@ -88,7 +98,6 @@ namespace Bg.UniTaskStateMachine
             {
                 return;
             }
-            CurrentState = State.STOP;
             CurrentNode?.Stop();
         }
 
