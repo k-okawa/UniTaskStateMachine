@@ -11,7 +11,7 @@ namespace Bg.UniTaskStateMachine
     [DisallowMultipleComponent]
     public class StateMachineBehaviour : MonoBehaviour
     {
-        [SerializeField]
+        [SerializeField, HideInInspector]
         private Graph graph = new Graph();
         [SerializeField] 
         private PlayerLoopTiming loopTiming = PlayerLoopTiming.Update;

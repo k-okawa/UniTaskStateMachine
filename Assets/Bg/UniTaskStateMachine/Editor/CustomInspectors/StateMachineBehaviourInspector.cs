@@ -16,6 +16,8 @@ namespace Bg.UniTaskStateMachine.Editor
 
         public override void OnInspectorGUI()
         {
+            base.OnInspectorGUI();
+            
             if (stateMachine == null)
             {
                 return;
@@ -28,7 +30,7 @@ namespace Bg.UniTaskStateMachine.Editor
         {
             EditorGUILayout.BeginHorizontal();
             {
-                EditorGUILayout.LabelField("Open Editor");
+                EditorGUILayout.LabelField("Graph Editor");
 
                 if (GUILayout.Button("Open", EditorStyles.miniButton, GUILayout.Width(50)))
                 {
