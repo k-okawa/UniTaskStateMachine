@@ -18,7 +18,7 @@ namespace Bg.UniTaskStateMachine
 
         public List<BaseCondition> Conditions = new List<BaseCondition>();
 
-        public async UniTask<BaseNode> Start() 
+        public async UniTask<BaseNode> Start(PlayerLoopTiming loopTiming = PlayerLoopTiming.Update) 
         {
             IsUpdate = true;
             cancellationTokenSource?.Cancel();
@@ -26,16 +26,13 @@ namespace Bg.UniTaskStateMachine
 
             State.Init(this);
             await State.OnEnter(cancellationTokenSource.Token);
-            if (Conditions.Count <= 0)
-            {
-                await State.OnExit(cancellationTokenSource.Token);
-                return null;
-            }
             BaseCondition nextCondition = null;
             while (true)
             {
-                await UniTask.DelayFrame(1, cancellationToken: cancellationTokenSource.Token);
-                await UniTask.WaitUntil(() => IsUpdate, cancellationToken: cancellationTokenSource.Token);
+                await UniTask.Yield(loopTiming, cancellationTokenSource.Token);
+                while (!IsUpdate) {
+                    await UniTask.Yield(loopTiming, cancellationTokenSource.Token);
+                }
                 await State.OnUpdate(cancellationTokenSource.Token);
                 nextCondition = CheckCondition();
                 if (nextCondition != null)

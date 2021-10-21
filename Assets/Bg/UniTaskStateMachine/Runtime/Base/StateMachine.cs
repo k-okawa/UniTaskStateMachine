@@ -19,9 +19,15 @@ namespace Bg.UniTaskStateMachine
         
         public BaseNode CurrentNode;
         public State CurrentState { get; private set; } = State.STOP;
+        public PlayerLoopTiming LoopTiming = PlayerLoopTiming.Update;
 
         public async void Start()
         {
+            if (CurrentState != State.STOP) 
+            {
+                return;
+            }
+            
             if (CurrentNode == null)
             {
                 return;
@@ -32,7 +38,7 @@ namespace Bg.UniTaskStateMachine
             {
                 try 
                 {
-                    var nextNode = await CurrentNode.Start();
+                    var nextNode = await CurrentNode.Start(LoopTiming);
                     if (nextNode == null) {
                         CurrentState = State.STOP;
                         return;
@@ -41,6 +47,7 @@ namespace Bg.UniTaskStateMachine
                 }
                 catch (OperationCanceledException e) 
                 {
+                    CurrentState = State.STOP;
                     return;
                 }
             }
@@ -77,18 +84,30 @@ namespace Bg.UniTaskStateMachine
 
         public void Stop()
         {
+            if (CurrentState == State.STOP) 
+            {
+                return;
+            }
             CurrentState = State.STOP;
             CurrentNode?.Stop();
         }
 
         public void Pause()
         {
+            if (CurrentState != State.START) 
+            {
+                return;
+            }
             CurrentState = State.PAUSE;
             CurrentNode?.Pause();
         }
 
         public void Resume()
         {
+            if (CurrentState != State.PAUSE) 
+            {
+                return;
+            }
             CurrentState = State.START;
             CurrentNode?.Resume();
         }
