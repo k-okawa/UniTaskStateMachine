@@ -61,7 +61,7 @@ namespace Bg.UniTaskStateMachine
             }
         }
 
-        public async UniTask TriggerNextTransition(string transitionId) 
+        public async void TriggerNextTransition(string transitionId) 
         {
             if (CurrentState != State.START) 
             {
