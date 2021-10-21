@@ -19,6 +19,7 @@ namespace Bg.UniTaskStateMachine
         
         public BaseNode CurrentNode;
         public State CurrentState { get; private set; } = State.STOP;
+        public PlayerLoopTiming LoopTiming = PlayerLoopTiming.Update;
 
         public async void Start()
         {
@@ -32,7 +33,7 @@ namespace Bg.UniTaskStateMachine
             {
                 try 
                 {
-                    var nextNode = await CurrentNode.Start();
+                    var nextNode = await CurrentNode.Start(LoopTiming);
                     if (nextNode == null) {
                         CurrentState = State.STOP;
                         return;

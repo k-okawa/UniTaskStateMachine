@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Bg.UniTaskStateMachine
@@ -12,6 +13,8 @@ namespace Bg.UniTaskStateMachine
     {
         [SerializeField]
         private Graph graph = new Graph();
+        [SerializeField] 
+        private PlayerLoopTiming loopTiming = PlayerLoopTiming.Update;
 
         public Graph Graph => graph;
         
@@ -20,6 +23,7 @@ namespace Bg.UniTaskStateMachine
         private void Awake()
         {
             StateMachine = new StateMachine();
+            StateMachine.LoopTiming = loopTiming;
             if (Graph.EntryStateId == string.Empty)
             {
                 Debug.LogError("Entry state ID not set");
