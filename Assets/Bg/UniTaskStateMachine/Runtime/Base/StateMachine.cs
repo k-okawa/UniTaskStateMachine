@@ -41,6 +41,7 @@ namespace Bg.UniTaskStateMachine
                 }
                 catch (OperationCanceledException e) 
                 {
+                    CurrentState = State.STOP;
                     return;
                 }
             }

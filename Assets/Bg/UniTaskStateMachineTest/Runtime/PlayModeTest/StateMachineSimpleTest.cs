@@ -68,6 +68,7 @@ namespace Bg.UniTaskStateMachine.Tests
             public override async UniTask OnEnter(CancellationToken ct = default)
             {
                 UnityEngine.Debug.Log("Game End");
+                baseNode.Stop();
             }
         }
         
@@ -82,7 +83,6 @@ namespace Bg.UniTaskStateMachine.Tests
             endNode.State = new EndState();
             
             startNode.Conditions.Add(new BaseCondition(playNode, () => GameManager.isInit, "IsStart"));
-
             playNode.Conditions.Add(new BaseCondition(endNode, () => GameManager.bossHp <= 0, "IsEnd"));
             
             StateMachine sm = new StateMachine();

@@ -26,11 +26,6 @@ namespace Bg.UniTaskStateMachine
 
             State.Init(this);
             await State.OnEnter(cancellationTokenSource.Token);
-            if (Conditions.Count <= 0)
-            {
-                await State.OnExit(cancellationTokenSource.Token);
-                return null;
-            }
             BaseCondition nextCondition = null;
             while (true)
             {
