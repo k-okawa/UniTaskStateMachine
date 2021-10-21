@@ -23,6 +23,11 @@ namespace Bg.UniTaskStateMachine
 
         public async void Start()
         {
+            if (CurrentState != State.STOP) 
+            {
+                return;
+            }
+            
             if (CurrentNode == null)
             {
                 return;
@@ -79,18 +84,30 @@ namespace Bg.UniTaskStateMachine
 
         public void Stop()
         {
+            if (CurrentState == State.STOP) 
+            {
+                return;
+            }
             CurrentState = State.STOP;
             CurrentNode?.Stop();
         }
 
         public void Pause()
         {
+            if (CurrentState != State.START) 
+            {
+                return;
+            }
             CurrentState = State.PAUSE;
             CurrentNode?.Pause();
         }
 
         public void Resume()
         {
+            if (CurrentState != State.PAUSE) 
+            {
+                return;
+            }
             CurrentState = State.START;
             CurrentNode?.Resume();
         }
