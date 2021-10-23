@@ -85,6 +85,11 @@ namespace Bg.UniTaskStateMachine
             return CheckCondition() != null;
         }
 
+        public bool IsExistForceTransition()
+        {
+            return conditions.Any(itr => itr.IsForceTransition);
+        }
+
         public bool IsMatchState(Type type)
         {
             return State.GetType() == type;

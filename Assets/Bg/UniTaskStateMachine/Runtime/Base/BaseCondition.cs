@@ -12,6 +12,7 @@ namespace Bg.UniTaskStateMachine
         public bool IsNegative => isNegative;
 
         internal bool isForceTransition = false;
+        public bool IsForceTransition => isForceTransition;
 
         public BaseCondition(BaseNode nextNode, Func<bool> conditionCheckCallback, string transitionId)
         {
