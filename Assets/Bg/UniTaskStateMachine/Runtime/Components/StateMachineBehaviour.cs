@@ -49,8 +49,9 @@ namespace Bg.UniTaskStateMachine
                 {
                     continue;
                 }
-                
-                originNode.Conditions.Add(new BaseCondition(targetNode, CreateConditionFunc(transition), transition.ID) {
+
+                originNode.TryAddCondition(new BaseCondition(targetNode, CreateConditionFunc(transition), transition.ID)
+                {
                     isNegative = transition.IsNegative
                 });
             }
@@ -97,23 +98,16 @@ namespace Bg.UniTaskStateMachine
 
         private BaseNode CreateNode(GraphNode node) 
         {
-            BaseNode retNode = new BaseNode();
-            retNode.Id = node.ID;
-
+            IState iState = new BaseState();
             if (node is GraphState state)
             {
-                IState iState;
-                if (state.StateComponent == null) 
-                {
-                    iState = new BaseState();
-                }
-                else
+                if (state.StateComponent != null)
                 {
                     iState = state.StateComponent;
                 }
-
-                retNode.State = iState;
             }
+
+            BaseNode retNode = new BaseNode(StateMachine, node.ID, iState);
 
             return retNode;
         }

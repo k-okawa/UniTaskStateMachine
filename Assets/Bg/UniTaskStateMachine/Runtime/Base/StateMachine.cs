@@ -61,7 +61,7 @@ namespace Bg.UniTaskStateMachine
                 return;
             }
 
-            var targetCondition = CurrentNode?.Conditions.FirstOrDefault(itr => itr.TransitionId == transitionId);
+            var targetCondition = CurrentNode?.GetCondition(transitionId);
             if (targetCondition?.NextNode == null)
             {
                 return;

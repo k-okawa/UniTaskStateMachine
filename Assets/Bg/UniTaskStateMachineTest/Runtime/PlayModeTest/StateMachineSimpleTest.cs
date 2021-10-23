@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Threading;
+using UnityEngine;
 #if BG_USE_UNIRX_ASYNC
 using UniRx.Async;
 #else
@@ -27,7 +28,7 @@ namespace Bg.UniTaskStateMachine.Tests
 
             public override async UniTask OnUpdate(CancellationToken ct = default)
             {
-                await UniTask.DelayFrame(1);
+                await UniTask.DelayFrame(1, cancellationToken: ct);
                 GameManager.isInit = true;
             }
 
@@ -75,17 +76,13 @@ namespace Bg.UniTaskStateMachine.Tests
         [UnityTest]
         public IEnumerator SimpleTest()
         {
-            var startNode = new BaseNode();
-            startNode.State = new StartState();
-            var playNode = new BaseNode();
-            playNode.State = new PlayState();
-            var endNode = new BaseNode();
-            endNode.State = new EndState();
-            
-            startNode.Conditions.Add(new BaseCondition(playNode, () => GameManager.isInit, "IsStart"));
-            playNode.Conditions.Add(new BaseCondition(endNode, () => GameManager.bossHp <= 0, "IsEnd"));
-            
             StateMachine sm = new StateMachine();
+            var startNode = new BaseNode(sm,"Start", new StartState());
+            var playNode = new BaseNode(sm, "Play", new PlayState());
+            var endNode = new BaseNode(sm, "End", new EndState());
+
+            startNode.TryAddCondition(new BaseCondition(playNode, () => GameManager.isInit, "IsStart"));
+            playNode.TryAddCondition(new BaseCondition(endNode, () => GameManager.bossHp <= 0, "IsEnd"));
             sm.CurrentNode = startNode;
             sm.Start();
 

@@ -4,11 +4,14 @@ namespace Bg.UniTaskStateMachine
 {
     public class BaseCondition
     {
-        public BaseNode NextNode { get; private set; }
-        public Func<bool> ConditionCheckCallback { get; private set; }
-        public string TransitionId { get; private set; }
-        public bool isNegative = false;
-        public bool isForceTransition = false;
+        public BaseNode NextNode { get; }
+        public Func<bool> ConditionCheckCallback { get; }
+        public string TransitionId { get; }
+        
+        internal bool isNegative = false;
+        public bool IsNegative => isNegative;
+
+        internal bool isForceTransition = false;
 
         public BaseCondition(BaseNode nextNode, Func<bool> conditionCheckCallback, string transitionId)
         {
