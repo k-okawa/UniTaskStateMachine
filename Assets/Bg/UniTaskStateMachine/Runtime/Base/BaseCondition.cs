@@ -8,6 +8,7 @@ namespace Bg.UniTaskStateMachine
         public Func<bool> ConditionCheckCallback { get; private set; }
         public string TransitionId { get; private set; }
         public bool isNegative = false;
+        public bool isForceTransition = false;
 
         public BaseCondition(BaseNode nextNode, Func<bool> conditionCheckCallback, string transitionId)
         {

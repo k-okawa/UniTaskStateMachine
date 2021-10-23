@@ -24,10 +24,14 @@ namespace Bg.UniTaskStateMachine
             cancellationTokenSource?.Cancel();
             cancellationTokenSource = new CancellationTokenSource();
 
+            foreach (var condition in Conditions)
+            {
+                condition.isForceTransition = false;
+            }
             State.Init(this);
             await State.OnEnter(cancellationTokenSource.Token);
-            BaseCondition nextCondition = null;
-            while (true)
+            BaseCondition nextCondition = CheckCondition();
+            while (nextCondition == null)
             {
                 await UniTask.Yield(loopTiming, cancellationTokenSource.Token);
                 while (!IsUpdate) {
@@ -35,10 +39,6 @@ namespace Bg.UniTaskStateMachine
                 }
                 await State.OnUpdate(cancellationTokenSource.Token);
                 nextCondition = CheckCondition();
-                if (nextCondition != null)
-                {
-                    break;
-                }
             }
             await State.OnExit(cancellationTokenSource.Token);
             return nextCondition.NextNode;
@@ -48,6 +48,11 @@ namespace Bg.UniTaskStateMachine
         {
             foreach (var condition in Conditions)
             {
+                if (condition.isForceTransition)
+                {
+                    return condition;
+                }
+                
                 if (condition.isNegative) 
                 {
                     if (!condition.ConditionCheckCallback?.Invoke() ?? false)

@@ -22,13 +22,6 @@ namespace Bg.UniTaskStateMachine
         public State CurrentState { get; private set; } = State.STOP;
         public PlayerLoopTiming LoopTiming = PlayerLoopTiming.Update;
 
-        private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-
-        ~StateMachine() 
-        {
-            cancellationTokenSource.Cancel();
-        }
-
         public async void Start()
         {
             if (CurrentState != State.STOP) 
@@ -61,35 +54,20 @@ namespace Bg.UniTaskStateMachine
             }
         }
 
-        public async void TriggerNextTransition(string transitionId) 
+        public void TriggerNextTransition(string transitionId) 
         {
             if (CurrentState != State.START) 
             {
                 return;
             }
 
-            if (CurrentNode == null)
-            {
-                return;
-            }
-
-            var targetCondition = CurrentNode.Conditions.FirstOrDefault(itr => itr.TransitionId == transitionId);
+            var targetCondition = CurrentNode?.Conditions.FirstOrDefault(itr => itr.TransitionId == transitionId);
             if (targetCondition?.NextNode == null)
             {
                 return;
             }
 
-            CurrentNode.IsUpdate = false;
-
-            await CurrentNode.State.OnExit(cancellationTokenSource.Token);
-
-            Stop();
-
-            await UniTask.WaitUntil(() => CurrentState == State.STOP, cancellationToken: cancellationTokenSource.Token);
-
-            CurrentNode = targetCondition.NextNode;
-
-            Start();
+            targetCondition.isForceTransition = true;
         }
 
         public void Stop()
