@@ -15,16 +15,11 @@ namespace Bg.UniTaskStateMachine.Tests
         public static class GameManager
         {
             public static bool isInit = false;
-            public static int bossHp = 100;
+            public static int bossHp = 50;
         }
 
         public class StartState : BaseState
         {
-            private StateMachine sm;
-            public StartState(StateMachine stateMachine) {
-                sm = stateMachine;
-            }
-            
             public override async UniTask OnEnter(CancellationToken ct = default)
             {
                 UnityEngine.Debug.Log("Init Start");
@@ -32,9 +27,9 @@ namespace Bg.UniTaskStateMachine.Tests
 
             public override async UniTask OnUpdate(CancellationToken ct = default)
             {
-                await UniTask.DelayFrame(1);
+                await UniTask.DelayFrame(1, cancellationToken: ct);
                 GameManager.isInit = true;
-                sm.TriggerNextTransition("IsStart");
+                baseNode.StateMachine.TriggerNextTransition("IsStart");
             }
 
             public override async UniTask OnExit(CancellationToken ct = default)
@@ -45,11 +40,6 @@ namespace Bg.UniTaskStateMachine.Tests
 
         public class PlayState : BaseState
         {
-            private StateMachine sm;
-            public PlayState(StateMachine stateMachine) {
-                sm = stateMachine;
-            }
-            
             public override async UniTask OnEnter(CancellationToken ct = default)
             {
                 UnityEngine.Debug.Log("Play Start");
@@ -63,11 +53,13 @@ namespace Bg.UniTaskStateMachine.Tests
                 if (GameManager.bossHp < 0)
                 {
                     GameManager.bossHp = 0;
-                    sm.TriggerNextTransition("IsEnd");
-                    return;
+                    baseNode.StateMachine.TriggerNextTransition("IsEnd");
                 }
-
-                UnityEngine.Debug.Log($"Boss Hp = {GameManager.bossHp}");
+                else
+                {
+                    baseNode.StateMachine.TriggerNextTransition("Pause");
+                }
+                
             }
 
             public override async UniTask OnExit(CancellationToken ct = default)
@@ -75,14 +67,28 @@ namespace Bg.UniTaskStateMachine.Tests
                 UnityEngine.Debug.Log("Play End");
             }
         }
+        
+        public class PauseState : BaseState
+        {
+            public override async UniTask OnEnter(CancellationToken ct = default)
+            {
+                UnityEngine.Debug.Log("Pause");
+            }
+
+            public override async UniTask OnUpdate(CancellationToken ct = default)
+            {
+                await UniTask.DelayFrame(10, cancellationToken: ct);
+                baseNode.StateMachine.TriggerNextTransition("Resume");
+            }
+
+            public override async UniTask OnExit(CancellationToken ct = default)
+            {
+                UnityEngine.Debug.Log("Resume");
+            }
+        }
 
         public class EndState : BaseState
         {
-            private StateMachine sm;
-            public EndState(StateMachine stateMachine) {
-                sm = stateMachine;
-            }
-            
             public override async UniTask OnEnter(CancellationToken ct = default)
             {
                 UnityEngine.Debug.Log("Game End");
@@ -95,15 +101,15 @@ namespace Bg.UniTaskStateMachine.Tests
         {
             StateMachine sm = new StateMachine();
             
-            var startNode = new BaseNode();
-            startNode.State = new StartState(sm);
-            var playNode = new BaseNode();
-            playNode.State = new PlayState(sm);
-            var endNode = new BaseNode();
-            endNode.State = new EndState(sm);
+            var startNode = new BaseNode(sm, "Start", new StartState());
+            var playNode = new BaseNode(sm, "Play", new PlayState());
+            var pauseNode = new BaseNode(sm, "Pause", new PauseState());
+            var endNode = new BaseNode(sm, "End", new EndState());
             
-            startNode.Conditions.Add(new BaseCondition(playNode, () => false, "IsStart"));
-            playNode.Conditions.Add(new BaseCondition(endNode, () => false, "IsEnd"));
+            startNode.TryAddCondition(new BaseCondition(playNode, () => false, "IsStart"));
+            playNode.TryAddCondition(new BaseCondition(endNode, () => false, "IsEnd"));
+            playNode.TryAddCondition(new BaseCondition(pauseNode, () => false, "Pause"));
+            pauseNode.TryAddCondition(new BaseCondition(playNode, () =>false, "Resume"));
             
             sm.CurrentNode = startNode;
             sm.Start();

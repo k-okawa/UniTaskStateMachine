@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 #if BG_USE_UNIRX_ASYNC
 using UniRx.Async;
@@ -10,13 +12,20 @@ namespace Bg.UniTaskStateMachine
 {
     public class BaseNode
     {
-        public string Id;
-        public IState State = new BaseState();
+        public readonly string Id;
+        public readonly StateMachine StateMachine;
+        public bool IsUpdate { get; private set; } = true;
+        
+        private readonly IState State;
+        private List<BaseCondition> conditions = new List<BaseCondition>();
         private CancellationTokenSource cancellationTokenSource;
-
-        public bool IsUpdate { get; set; } = true;
-
-        public List<BaseCondition> Conditions = new List<BaseCondition>();
+        
+        public BaseNode(StateMachine stateMachine, string id, IState state)
+        {
+            this.Id = id;
+            this.State = state;
+            this.StateMachine = stateMachine;
+        }
 
         public async UniTask<BaseNode> Start(PlayerLoopTiming loopTiming = PlayerLoopTiming.Update) 
         {
@@ -24,10 +33,14 @@ namespace Bg.UniTaskStateMachine
             cancellationTokenSource?.Cancel();
             cancellationTokenSource = new CancellationTokenSource();
 
+            foreach (var condition in conditions)
+            {
+                condition.isForceTransition = false;
+            }
             State.Init(this);
             await State.OnEnter(cancellationTokenSource.Token);
-            BaseCondition nextCondition = null;
-            while (true)
+            BaseCondition nextCondition = CheckCondition();
+            while (nextCondition == null)
             {
                 await UniTask.Yield(loopTiming, cancellationTokenSource.Token);
                 while (!IsUpdate) {
@@ -35,10 +48,6 @@ namespace Bg.UniTaskStateMachine
                 }
                 await State.OnUpdate(cancellationTokenSource.Token);
                 nextCondition = CheckCondition();
-                if (nextCondition != null)
-                {
-                    break;
-                }
             }
             await State.OnExit(cancellationTokenSource.Token);
             return nextCondition.NextNode;
@@ -46,8 +55,13 @@ namespace Bg.UniTaskStateMachine
 
         private BaseCondition CheckCondition()
         {
-            foreach (var condition in Conditions)
+            foreach (var condition in conditions)
             {
+                if (condition.isForceTransition)
+                {
+                    return condition;
+                }
+                
                 if (condition.isNegative) 
                 {
                     if (!condition.ConditionCheckCallback?.Invoke() ?? false)
@@ -71,6 +85,16 @@ namespace Bg.UniTaskStateMachine
             return CheckCondition() != null;
         }
 
+        public bool IsExistForceTransition()
+        {
+            return conditions.Any(itr => itr.IsForceTransition);
+        }
+
+        public bool IsMatchState(Type type)
+        {
+            return State.GetType() == type;
+        }
+
         public void Stop() 
         {
             IsUpdate = false;
@@ -85,6 +109,28 @@ namespace Bg.UniTaskStateMachine
         public void Resume()
         {
             IsUpdate = true;
+        }
+
+        public bool TryAddCondition(BaseCondition condition)
+        {
+            if (conditions.Any(itr => itr.TransitionId == condition.TransitionId))
+            {
+                return false;
+            }
+            
+            conditions.Add(condition);
+
+            return true;
+        }
+        
+        public BaseCondition GetCondition(string id)
+        {
+            return conditions.FirstOrDefault(itr => itr.TransitionId == id);
+        }
+
+        public IEnumerable<string> GetConditionIds()
+        {
+            return conditions.Select(itr => itr.TransitionId);
         }
     }
 }

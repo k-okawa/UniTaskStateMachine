@@ -42,10 +42,8 @@ namespace Bg.UniTaskStateMachine.Tests
         [UnityTest]
         public IEnumerator TimeCheck()
         {
-            var startNode = new BaseNode();
-            startNode.State = new PlayState();
-
             StateMachine sm = new StateMachine();
+            var startNode = new BaseNode(sm, "Start", new PlayState());
             sm.CurrentNode = startNode;
             Stopwatch sp = new Stopwatch();
             sp.Start();
@@ -66,10 +64,8 @@ namespace Bg.UniTaskStateMachine.Tests
         
         [UnityTest]
         public IEnumerator StateMachineStartStartTest() {
-            var startNode = new BaseNode();
-            startNode.State = new PlayState();
-
             StateMachine sm = new StateMachine();
+            var startNode = new BaseNode(sm, "Start", new PlayState());
             sm.CurrentNode = startNode;
             sm.Start();
             
@@ -88,10 +84,8 @@ namespace Bg.UniTaskStateMachine.Tests
 
         [UnityTest]
         public IEnumerator StateMachinePauseResumeTest() {
-            var startNode = new BaseNode();
-            startNode.State = new PlayState();
-
             StateMachine sm = new StateMachine();
+            var startNode = new BaseNode(sm, "Start", new PlayState());
             sm.CurrentNode = startNode;
             sm.Start();
 
@@ -112,10 +106,8 @@ namespace Bg.UniTaskStateMachine.Tests
         
         [UnityTest]
         public IEnumerator StateMachineStopStartTest() {
-            var startNode = new BaseNode();
-            startNode.State = new PlayState();
-
             StateMachine sm = new StateMachine();
+            var startNode = new BaseNode(sm, "Start", new PlayState());
             sm.CurrentNode = startNode;
             sm.Start();
 
@@ -136,10 +128,8 @@ namespace Bg.UniTaskStateMachine.Tests
         
         [UnityTest]
         public IEnumerator NodePauseResumeTest() {
-            var startNode = new BaseNode();
-            startNode.State = new PlayState();
-
             StateMachine sm = new StateMachine();
+            var startNode = new BaseNode(sm, "Start", new PlayState());
             sm.CurrentNode = startNode;
             sm.Start();
 
@@ -160,10 +150,8 @@ namespace Bg.UniTaskStateMachine.Tests
         
         [UnityTest]
         public IEnumerator NodeStopStartTest() {
-            var startNode = new BaseNode();
-            startNode.State = new PlayState();
-
             StateMachine sm = new StateMachine();
+            var startNode = new BaseNode(sm, "Start", new PlayState());
             sm.CurrentNode = startNode;
             sm.Start();
 
