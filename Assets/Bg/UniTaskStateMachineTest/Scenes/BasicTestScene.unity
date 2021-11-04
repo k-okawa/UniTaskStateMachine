@@ -276,7 +276,7 @@ MonoBehaviour:
       dragSettings:
         dragOffset: {x: 370.53925, y: 6.755946}
     entryState: Start
-  playOnEnable: 0
+  playOnEnable: 1
   loopTiming: 8
 --- !u!4 &854791542
 Transform:

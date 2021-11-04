@@ -58,6 +58,13 @@ namespace Bg.UniTaskStateMachine
                 }
             }
         }
+        
+        public async UniTask ReStart(CancellationToken ct = default) 
+        {
+            Stop();
+            await UniTask.Yield(LoopTiming, ct);
+            Start();
+        }
 
         public void TriggerNextTransition(string transitionId) 
         {
