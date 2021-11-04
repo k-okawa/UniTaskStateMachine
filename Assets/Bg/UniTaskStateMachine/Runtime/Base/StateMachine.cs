@@ -17,8 +17,9 @@ namespace Bg.UniTaskStateMachine
             START,
             PAUSE
         }
-        
-        public BaseNode CurrentNode;
+
+        public BaseNode EntryNode;
+        public BaseNode CurrentNode { get; private set; }
         public State CurrentState { get; private set; } = State.STOP;
         public PlayerLoopTiming LoopTiming = PlayerLoopTiming.Update;
 
@@ -29,9 +30,13 @@ namespace Bg.UniTaskStateMachine
                 return;
             }
             
-            if (CurrentNode == null)
+            if (CurrentNode == null) 
             {
-                return;
+                CurrentNode = EntryNode;
+                if (CurrentNode == null) 
+                {
+                    return;
+                }
             }
 
             CurrentState = State.START;
@@ -52,6 +57,13 @@ namespace Bg.UniTaskStateMachine
                     return;
                 }
             }
+        }
+        
+        public async UniTask ReStart(CancellationToken ct = default) 
+        {
+            Stop();
+            await UniTask.Yield(LoopTiming, ct);
+            Start();
         }
 
         public void TriggerNextTransition(string transitionId) 
@@ -77,6 +89,7 @@ namespace Bg.UniTaskStateMachine
                 return;
             }
             CurrentNode?.Stop();
+            CurrentNode = EntryNode;
         }
 
         public void Pause()

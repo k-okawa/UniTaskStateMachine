@@ -44,7 +44,7 @@ namespace Bg.UniTaskStateMachine.Tests
         {
             StateMachine sm = new StateMachine();
             var startNode = new BaseNode(sm, "Start", new PlayState());
-            sm.CurrentNode = startNode;
+            sm.EntryNode = startNode;
             Stopwatch sp = new Stopwatch();
             sp.Start();
             sm.Start();
@@ -66,7 +66,7 @@ namespace Bg.UniTaskStateMachine.Tests
         public IEnumerator StateMachineStartStartTest() {
             StateMachine sm = new StateMachine();
             var startNode = new BaseNode(sm, "Start", new PlayState());
-            sm.CurrentNode = startNode;
+            sm.EntryNode = startNode;
             sm.Start();
             
             yield return new WaitForSeconds(1.5f);
@@ -86,7 +86,7 @@ namespace Bg.UniTaskStateMachine.Tests
         public IEnumerator StateMachinePauseResumeTest() {
             StateMachine sm = new StateMachine();
             var startNode = new BaseNode(sm, "Start", new PlayState());
-            sm.CurrentNode = startNode;
+            sm.EntryNode = startNode;
             sm.Start();
 
             yield return new WaitForSeconds(0.5f);
@@ -108,7 +108,7 @@ namespace Bg.UniTaskStateMachine.Tests
         public IEnumerator StateMachineStopStartTest() {
             StateMachine sm = new StateMachine();
             var startNode = new BaseNode(sm, "Start", new PlayState());
-            sm.CurrentNode = startNode;
+            sm.EntryNode = startNode;
             sm.Start();
 
             yield return new WaitForSeconds(0.5f);
@@ -130,7 +130,7 @@ namespace Bg.UniTaskStateMachine.Tests
         public IEnumerator NodePauseResumeTest() {
             StateMachine sm = new StateMachine();
             var startNode = new BaseNode(sm, "Start", new PlayState());
-            sm.CurrentNode = startNode;
+            sm.EntryNode = startNode;
             sm.Start();
 
             yield return new WaitForSeconds(0.5f);
@@ -152,7 +152,7 @@ namespace Bg.UniTaskStateMachine.Tests
         public IEnumerator NodeStopStartTest() {
             StateMachine sm = new StateMachine();
             var startNode = new BaseNode(sm, "Start", new PlayState());
-            sm.CurrentNode = startNode;
+            sm.EntryNode = startNode;
             sm.Start();
 
             yield return new WaitForSeconds(0.5f);

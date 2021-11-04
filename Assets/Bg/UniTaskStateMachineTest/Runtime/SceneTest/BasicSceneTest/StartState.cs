@@ -12,6 +12,7 @@ namespace Bg.UniTaskStateMachine.Tests.BasicSceneTest
         public override async UniTask OnEnter(CancellationToken ct = default)
         {
             UnityEngine.Debug.Log("Init Start");
+            GameManager.bossHp = 100;
         }
 
         public override async UniTask OnUpdate(CancellationToken ct = default)

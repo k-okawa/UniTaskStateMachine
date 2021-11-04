@@ -39,6 +39,33 @@ namespace Bg.UniTaskStateMachine.Editor
                 }
             }
             EditorGUILayout.EndHorizontal();
+
+            if (Application.isPlaying) 
+            {
+                EditorGUILayout.BeginHorizontal();
+                {
+                    if (GUILayout.Button("Start", EditorStyles.miniButton, GUILayout.Width(50)))
+                    {
+                        stateMachine.StateMachine.Start();
+                    }
+
+                    if (GUILayout.Button("Stop", EditorStyles.miniButton, GUILayout.Width(50)))
+                    {
+                        stateMachine.StateMachine.Stop();
+                    }
+                    
+                    if (GUILayout.Button("Pause", EditorStyles.miniButton, GUILayout.Width(50)))
+                    {
+                        stateMachine.StateMachine.Pause();
+                    }
+                    
+                    if (GUILayout.Button("Resume", EditorStyles.miniButton, GUILayout.Width(60)))
+                    {
+                        stateMachine.StateMachine.Resume();
+                    }
+                }
+                EditorGUILayout.EndHorizontal();
+            }
         }
     }
 }
