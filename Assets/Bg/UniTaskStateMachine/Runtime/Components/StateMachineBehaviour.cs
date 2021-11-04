@@ -114,25 +114,31 @@ namespace Bg.UniTaskStateMachine
 
         private Func<bool> CreateConditionFunc(GraphTransition transition)
         {
-            Func<bool> retFunc = () =>
+            string methodName = transition.ConditionMethodName;
+            MethodInfo methodInfo = null;
+            Component comp = null;
+            if (methodName != string.Empty && methodName != "None")
             {
-                string methodName = transition.ConditionMethodName;
-                if (methodName != string.Empty && methodName != "None")
+                var divided = methodName.Split('/');
+                string className = divided[0];
+                string method = divided[1];
+                comp = GetComponent(className);
+                Type type = comp.GetType();
+                methodInfo = type.GetMethod(method);
+            }
+
+            bool ConditionFunc() 
+            {
+                if (comp != null && methodInfo != null) 
                 {
-                    var divided = methodName.Split('/');
-                    string className = divided[0];
-                    string method = divided[1];
-                    var comp = GetComponent(className);
-                    Type type = comp.GetType();
-                    MethodInfo methodInfo = type.GetMethod(method);
-                    bool isMatch = !(methodInfo is null) && (bool)methodInfo.Invoke(comp, null);
+                    bool isMatch = (bool) methodInfo.Invoke(comp, null);
                     return isMatch;
                 }
-                
-                return false;
-            };
 
-            return retFunc;
+                return false;
+            }
+
+            return ConditionFunc;
         }
     }
 }
