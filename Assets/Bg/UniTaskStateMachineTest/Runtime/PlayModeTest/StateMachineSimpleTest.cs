@@ -83,7 +83,7 @@ namespace Bg.UniTaskStateMachine.Tests
 
             startNode.TryAddCondition(new BaseCondition(playNode, () => GameManager.isInit, "IsStart"));
             playNode.TryAddCondition(new BaseCondition(endNode, () => GameManager.bossHp <= 0, "IsEnd"));
-            sm.CurrentNode = startNode;
+            sm.EntryNode = startNode;
             sm.Start();
 
             while (true)

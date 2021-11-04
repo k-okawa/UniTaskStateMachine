@@ -111,7 +111,7 @@ namespace Bg.UniTaskStateMachine.Tests
             playNode.TryAddCondition(new BaseCondition(pauseNode, () => false, "Pause"));
             pauseNode.TryAddCondition(new BaseCondition(playNode, () =>false, "Resume"));
             
-            sm.CurrentNode = startNode;
+            sm.EntryNode = startNode;
             sm.Start();
 
             while (true)

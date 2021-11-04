@@ -18,6 +18,8 @@ namespace Bg.UniTaskStateMachine
         [SerializeField, HideInInspector]
         private Graph graph = new Graph();
         [SerializeField] 
+        public bool playOnEnable = true;
+        [SerializeField] 
         private PlayerLoopTiming loopTiming = PlayerLoopTiming.Update;
 
         public Graph Graph => graph;
@@ -63,17 +65,17 @@ namespace Bg.UniTaskStateMachine
                 return;
             }
 
-            StateMachine.CurrentNode = entryNode;
+            StateMachine.EntryNode = entryNode;
         }
 
         private void OnEnable()
         {
-            if (StateMachine.CurrentNode != null)
+            if (StateMachine.EntryNode != null)
             {
                 switch (StateMachine.CurrentState)
                 {
                     case StateMachine.State.STOP:
-                        StateMachine.Start();
+                        if(playOnEnable) StateMachine.Start();
                         break;
                     case StateMachine.State.PAUSE:
                         StateMachine.Resume();
