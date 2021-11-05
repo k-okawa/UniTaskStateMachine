@@ -95,6 +95,11 @@ namespace Bg.UniTaskStateMachine
             return State.GetType() == type;
         }
 
+        public bool IsMatchAnyState(params Type[] types) 
+        {
+            return types.Any(IsMatchState);
+        }
+
         public void Stop() 
         {
             IsUpdate = false;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 #if BG_USE_UNIRX_ASYNC
@@ -85,6 +86,11 @@ namespace Bg.UniTaskStateMachine
         public bool IsMatchCurrentStateType(Type type) 
         {
             return CurrentNode.IsMatchState(type);
+        }
+
+        public bool IsMatchAnyCurrentStateType(params Type[] types) 
+        {
+            return CurrentNode.IsMatchAnyState(types);
         }
 
         public void Stop()
