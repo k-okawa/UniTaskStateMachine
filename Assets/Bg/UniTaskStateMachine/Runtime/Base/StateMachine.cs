@@ -82,6 +82,11 @@ namespace Bg.UniTaskStateMachine
             targetCondition.isForceTransition = true;
         }
 
+        public bool IsMatchCurrentStateType(Type type) 
+        {
+            return CurrentNode.IsMatchState(type);
+        }
+
         public void Stop()
         {
             if (CurrentState == State.STOP) 
