@@ -29,7 +29,7 @@ namespace Bg.UniTaskStateMachine.Tests
                 time += Time.deltaTime;
                 Debug.Log($"Time:{time}");
                 if (time >= 2f) {
-                    baseNode.Stop();
+                    baseNode.StateMachine.Stop();
                 }
             }
 
@@ -134,9 +134,9 @@ namespace Bg.UniTaskStateMachine.Tests
             sm.Start();
 
             yield return new WaitForSeconds(0.5f);
-            startNode.Pause();
+            sm.Pause();
             yield return new WaitForSeconds(1.5f);
-            startNode.Resume();
+            sm.Resume();
 
             while (true)
             {
@@ -156,9 +156,9 @@ namespace Bg.UniTaskStateMachine.Tests
             sm.Start();
 
             yield return new WaitForSeconds(0.5f);
-            startNode.Stop();
+            sm.Stop();
             yield return new WaitForSeconds(1.5f);
-            startNode.Start();
+            sm.Start();
 
             while (true)
             {

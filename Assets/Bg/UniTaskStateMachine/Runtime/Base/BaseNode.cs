@@ -27,7 +27,7 @@ namespace Bg.UniTaskStateMachine
             this.StateMachine = stateMachine;
         }
 
-        public async UniTask<BaseNode> Start(PlayerLoopTiming loopTiming = PlayerLoopTiming.Update) 
+        internal async UniTask<BaseNode> Start(PlayerLoopTiming loopTiming = PlayerLoopTiming.Update) 
         {
             IsUpdate = true;
             cancellationTokenSource?.Cancel();
@@ -80,11 +80,19 @@ namespace Bg.UniTaskStateMachine
             return null;
         }
 
+        /// <summary>
+        /// is match any condition
+        /// </summary>
+        /// <returns>return true if node has any true conditions</returns>
         public bool IsMatchAnyCondition()
         {
             return CheckCondition() != null;
         }
 
+        /// <summary>
+        /// is exist force transition
+        /// </summary>
+        /// <returns>return true if node has any force transition</returns>
         public bool IsExistForceTransition()
         {
             return conditions.Any(itr => itr.IsForceTransition);
@@ -100,18 +108,18 @@ namespace Bg.UniTaskStateMachine
             return types.Any(IsMatchState);
         }
 
-        public void Stop() 
+        internal void Stop() 
         {
             IsUpdate = false;
             cancellationTokenSource?.Cancel();
         }
 
-        public void Pause()
+        internal void Pause()
         {
             IsUpdate = false;
         }
 
-        public void Resume()
+        internal void Resume()
         {
             IsUpdate = true;
         }
@@ -128,12 +136,20 @@ namespace Bg.UniTaskStateMachine
             return true;
         }
         
+        /// <summary>
+        /// get condition
+        /// </summary>
+        /// <param name="id">condition id (transition id named on graph editor)</param>
+        /// <returns>base condition</returns>
         public BaseCondition GetCondition(string id)
         {
             return conditions.FirstOrDefault(itr => itr.TransitionId == id);
         }
-
-        public IEnumerable<string> GetConditionIds()
+        
+        /// <summary>
+        /// get transition ids that node has
+        /// </summary>
+        public IEnumerable<string> GetTransitionIds()
         {
             return conditions.Select(itr => itr.TransitionId);
         }
