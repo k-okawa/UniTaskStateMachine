@@ -69,7 +69,7 @@ StateMachineBehaviourがアタッチされているGameObjectにBaseStateCompone
 
 ※BaseStateComponentを継承したクラスをさらに継承はしないでください。
 
-※BaseStateComponentを継承せずにAddComponentしないでください。
+※BaseStateComponentを直接AddComponentしないでください。
 
 **例**
 ```c#
