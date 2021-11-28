@@ -57,14 +57,18 @@ StateMachineBehaviourをAddComponentします。
 ![image](https://user-images.githubusercontent.com/49301086/143770544-d014aac1-e8a1-4c54-b1bf-d2945216f480.png)
 
 ### 2.GraphEditorを開く
-1で追加したStateMachineBehaviourのGraphEditorOpen、またはWindow/BG UniTaskStateMachine/StateMachineGraphでグラフエディタを開くことができます。
+1で追加したStateMachineBehaviourのGraphEditorOpen、
+
+またはWindow/BG UniTaskStateMachine/StateMachineGraphでグラフエディタを開くことができます。
 
 ![image](https://user-images.githubusercontent.com/49301086/143770686-8efd36c8-35fc-40a5-a1ec-4862a2dda9e3.png)
 
 ### 3.State追加方法
 #### 3-1.StateBehaviourを追加
 StateMachineBehaviourがアタッチされているGameObjectにBaseStateComponentを継承したComponentを追加します。
+
 ※BaseStateComponentを継承したクラスをさらに継承はしないでください。
+
 ※BaseStateComponentを継承せずにAddComponentしないでください。
 
 **例**
@@ -115,8 +119,11 @@ StateMachineBehaviourがアタッチされているGameObjectのComponentの中�
 ![image](https://user-images.githubusercontent.com/49301086/143771235-8a12410e-21af-47d5-a7bb-bf1e9c03d1ae.png)
 
 IsNegativeにチェックを入れることで条件を反対にすることができます。
+
 またMethodNameの指定をNoneにすると、常に条件を満たさないTransitionになります。
+
 後述するTriggerNextTransitionを呼び出すことでスクリプトから強制的に遷移を実行することも可能です。
+
 
 ![image](https://user-images.githubusercontent.com/49301086/143771269-6ffcd819-480a-4783-8f9f-ae28171c3036.png)
 
