@@ -1,4 +1,6 @@
 # UniTaskStateMachine
+English README is coming soon.
+
 以下のように戻り値がUniTaskになっているので、非同期に対応したステートマシーンを利用することができます。
 ```c#
 public interface IState
