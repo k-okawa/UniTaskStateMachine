@@ -1,6 +1,8 @@
 # UniTaskStateMachine
 English README is coming soon.
 
+[![openupm](https://img.shields.io/npm/v/com.littlebigfun.addressable-importer?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.littlebigfun.addressable-importer/)
+
 以下のように戻り値がUniTaskになっているので、非同期に対応したステートマシーンを利用することができます。
 ```c#
 public interface IState
