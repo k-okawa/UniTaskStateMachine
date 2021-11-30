@@ -92,7 +92,7 @@ namespace Bg.UniTaskStateMachine.Tests
             public override async UniTask OnEnter(CancellationToken ct = default)
             {
                 UnityEngine.Debug.Log("Game End");
-                baseNode.Stop();
+                baseNode.StateMachine.Stop();
             }
         }
         
@@ -117,7 +117,7 @@ namespace Bg.UniTaskStateMachine.Tests
             while (true)
             {
                 yield return null;
-                if (sm.CurrentNode == endNode)
+                if (sm.CurrentState == StateMachine.State.STOP)
                 {
                     break;
                 }
