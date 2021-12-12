@@ -114,6 +114,7 @@ namespace Bg.UniTaskStateMachine
             return retNode;
         }
 
+        delegate bool ConditionFuncDelegate();
         private Func<bool> CreateConditionFunc(GraphTransition transition)
         {
             string methodName = transition.ConditionMethodName;
@@ -129,11 +130,17 @@ namespace Bg.UniTaskStateMachine
                 methodInfo = type.GetMethod(method);
             }
 
+            ConditionFuncDelegate conditionFunc = null;
+            if (comp != null && methodInfo != null)
+            {
+                conditionFunc = (ConditionFuncDelegate) Delegate.CreateDelegate(typeof(ConditionFuncDelegate), comp, methodInfo.Name);
+            }
+            
             bool ConditionFunc() 
             {
-                if (comp != null && methodInfo != null) 
+                if (conditionFunc != null)
                 {
-                    bool isMatch = (bool) methodInfo.Invoke(comp, null);
+                    bool isMatch = conditionFunc();
                     return isMatch;
                 }
 
