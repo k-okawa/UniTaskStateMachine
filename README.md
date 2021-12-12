@@ -1,9 +1,10 @@
 # UniTaskStateMachine
-English README is coming soon.
+
+[[日本語](https://github.com/k-okawa/UniTaskStateMachine/blob/master/README.ja.md)]
 
 [![openupm](https://img.shields.io/npm/v/com.littlebigfun.addressable-importer?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.littlebigfun.addressable-importer/)
 
-以下のように戻り値がUniTaskになっているので、非同期に対応したステートマシーンを利用することができます。
+Since the return value is UniTask as shown below, you can use a state machine that supports asynchronous.
 ```c#
 public interface IState
 {
@@ -14,68 +15,75 @@ public interface IState
 }
 ```
 
-そのため以下の特徴があります
-- OnEnterが終了するまでOnUpdateのループが始まらない
-- OnExitが終了するまで次のステートに移行しない
-- OnUpdateは１フレームごとに呼ばれるがawaitしている間は呼ばれない
+It has the following features.
+- The OnUpdate loop does not start until OnEnter finishes
+- Does not transition to the next state until OnExit finishes
+- OnUpdate is called every frame but not during await
 
-またステートの移行方法は以下を対応しています
-- Transition(矢印)に判定を持たせ、条件が一致したときに移行
-- TransitionIDを指定して次のステートに移行
-  - 現在のステートが指定されたTransitionIDを持っていない場合は無視される
+In addition, the state transition method corresponds to the following.
+- Transition when conditions are match
+- Transition to the next state by specifying the TransitionID
+  - Ignored if the current state does not have the specified TransitionID
   
-Editorツールも提供しているので、簡単にステートを組むことが可能です。
-
-(スクリプト上で組むことも可能です)
+This package also provide an Editor tool, so you can easily create states.
 
 ![image](https://user-images.githubusercontent.com/49301086/137613577-d510a77c-0231-4e76-bf0f-a6f16a2ae506.png)
 
 
-## インストール
-### 依存関係
-パッケージ内でUniTaskを使用しているので、UniTaskがプロジェクト内に追加されている必要があります。
+## Installation
+### Dependency
+Using UniTask in the package, UniTask must be added in the project.
 
 [UniTask](https://github.com/Cysharp/UniTask)
 
-PackageManager,unitypackageのどちらで追加しても動作します。
+If you are using UniTask (UniRx.Async) before it was split from UniRx
 
-UniRxから分割される前のUniTask(UniRx.Async)を使用している場合は、
-
-ProjectSettings/Player/OtherSettings/ScriptingDefineSymbolで以下を定義することで使用可能になります。
+It can be used by defining the following in ProjectSettings / Player / OtherSettings / ScriptingDefineSymbol.
 
 ```
 BG_USE_UNIRX_ASYNC
 ```
 
 ### PackageManager
-Window/Package Managerを開き、add package from git URL...で以下を入力して追加してください。
+
+#### Install via git url
+
+Open Window/Package Manager, and add package from git URL...
 
 ```
 https://github.com/k-okawa/UniTaskStateMachine.git?path=Assets/Bg/UniTaskStateMachine
 ```
 
-## 使い方
-### 1.StateMachineBehaviour追加
-StateMachineBehaviourをAddComponentします。
+#### Install via OpenUPM
+
+```
+openupm add com.bg.unitaskstatemachine
+```
+
+## How to use
+### 1.Add StateMachineBehaviour Component
 
 ![image](https://user-images.githubusercontent.com/49301086/143770544-d014aac1-e8a1-4c54-b1bf-d2945216f480.png)
 
-### 2.GraphEditorを開く
-1で追加したStateMachineBehaviourのGraphEditorOpen、
+### 2.Open GraphEditor
 
-またはWindow/BG UniTaskStateMachine/StateMachineGraphでグラフエディタを開くことができます。
+GraphEditorOpen of StateMachineBehaviour added in 1
+
+Or you can open the graph editor with Window / BG UniTaskStateMachine / StateMachineGraph.
 
 ![image](https://user-images.githubusercontent.com/49301086/143770686-8efd36c8-35fc-40a5-a1ec-4862a2dda9e3.png)
 
-### 3.State追加方法
-#### 3-1.StateBehaviourを追加
-StateMachineBehaviourがアタッチされているGameObjectにBaseStateComponentを継承したComponentを追加します。
+### 3.How to add state
+#### 3-1.Add StateBehaviour
 
-※BaseStateComponentを継承したクラスをさらに継承はしないでください。
+Add a Component that inherits BaseStateComponent to the GameObject to which StateMachineBehaviour is attached.
 
-※BaseStateComponentを直接AddComponentしないでください。
 
-**例**
+* Do not inherit the class that inherits BaseStateComponent.
+
+* Do not addBaseStateComponent directly.
+
+**Example**
 ```c#
 namespace Bg.UniTaskStateMachine.Tests.BasicSceneTest
 {
@@ -101,128 +109,135 @@ namespace Bg.UniTaskStateMachine.Tests.BasicSceneTest
 
 ![image](https://user-images.githubusercontent.com/49301086/143770911-aa150949-1ece-4ea1-833d-1de973e09c0e.png)
 
-#### 3-2.追加したStateBehaviourを指定
+#### 3-2.Set the added StateBehaviour
 
-Graphエディタ上で右クリックし、CreateStateでState追加
+Right-click on the Graph editor and select Create State to add State.
 
 ![image](https://user-images.githubusercontent.com/49301086/143770989-faa1a688-2ecd-4407-87d7-3e9b2a4c570a.png)
 
-追加されているクラス名が表示され選択可能になります。
+The added class name will be displayed and can be selected.
 
 ![image](https://user-images.githubusercontent.com/49301086/143771064-9915284a-fd38-4b00-b0f7-2a22c120c972.png)
 
-Noneを選択した場合何もしないステートになります。
+If None is selected, the state will be nothing.
 
-### 4.Transition追加方法
-追加されているStateの上で右クリックし、MakeTransitionを選択することでTransitionを追加することができます。
+### 4.How to add Transition
+
+You can add a Transition by right-clicking on the added State and selecting Make Transition.
 
 ![image](https://user-images.githubusercontent.com/49301086/143771406-b0e40166-fd07-4091-8e98-a5cac1ba83f2.png)
 
-StateMachineBehaviourがアタッチされているGameObjectのComponentの中のpublicで戻り値がbool、引数なしの関数をステートの遷移条件として使用することができます。
+
+You can use a function that is public in the Component of the GameObject to which StateMachineBehaviour is attached, has a return value of bool, and has no arguments, as a state transition condition.
 
 ![image](https://user-images.githubusercontent.com/49301086/143771235-8a12410e-21af-47d5-a7bb-bf1e9c03d1ae.png)
 
-IsNegativeにチェックを入れることで条件を反対にすることができます。
+You can reverse the condition by checking Is Negative.
 
-またMethodNameの指定をNoneにすると、常に条件を満たさないTransitionになります。
+If you set MethodName to None, the transition will not always meet the conditions.
 
-後述するTriggerNextTransitionを呼び出すことでスクリプトから強制的に遷移を実行することも可能です。
+
+It is also possible to forcibly execute the transition from the script by calling TriggerNextTransition described later.
 
 
 ![image](https://user-images.githubusercontent.com/49301086/143771269-6ffcd819-480a-4783-8f9f-ae28171c3036.png)
 
-### 5.EntryState指定
-最初に実行するStateを必ず指定する必要があります。
+### 5.EntryState specification
+You must always specify the State to execute first.
 
-Stateを右クリックし、Set as Entryを選択することで設定することができます。
+It can be set by right-clicking on the State and selecting Set as Entry.
 
 ![image](https://user-images.githubusercontent.com/49301086/143771406-b0e40166-fd07-4091-8e98-a5cac1ba83f2.png)
 
 ## API Reference
 ### StateMachine
-StateMachineBehaviourのStateMachineプロパティからアクセスできます。
+It can be accessed from the StateMachine property of the StateMachineBehaviour.
 
-#### プロパティ
+#### Properties
 
 ```c#
-// エントリーステート
+// Entry state
 public BaseNode EntryNode;
 
-// 現在のステートノード
+// Current state node
 public BaseNode CurrentNode { get; private set; }
 
-// 現在のStateMachineの実行状態(STOP,START,PAUSE)
+// current StateMachine state(STOP,START,PAUSE)
 public State CurrentState { get; private set; } = State.STOP;
 
-// OnUpdateを呼ぶタイミング
+// Timing of OnUpdate
 public PlayerLoopTiming LoopTiming = PlayerLoopTiming.Update;
 ```
 
-#### メソッド
+#### Methods
 
 ```c#
 /// <summary>
-/// ステートマシーンを完全に停止する
+/// Start StateMachine
 /// </summary>
-public void Stop()
+public async void Start();
 
 /// <summary>
-/// 現在のステートを一時停止状態にする
+/// stop state machine completely
 /// </summary>
-public void Pause()
+public void Stop();
+
+/// pause current state
+/// </summary>
+public void Pause();
 
 /// <summary>
-/// 現在のステートを再開する
+/// resume current state
 /// </summary>
-public void Resume()
+public void Resume();
 
 /// <summary>
-/// エントリーステートからステートマシンを再実行
+/// restart state machine from entry state
 /// </summary>
-public async UniTask ReStart(CancellationToken ct = default) 
+public async UniTask ReStart(CancellationToken ct = default);
 
 /// <summary>
-/// 強制的に次のステートに遷移させる
+/// force transition to next state
 /// </summary>
-/// <param name="transitionId">Graphエディターで指定したtransitionId</param>
-public void TriggerNextTransition(string transitionId) 
+/// <param name="transitionId">transition id named on graph editor</param>
+public void TriggerNextTransition(string transitionId);
 
 /// <summary>
-/// 現在実行中のステートと等しいかどうか調べる
+/// whether current state is equivalent
 /// </summary>
-/// <param name="type">ステートタイプ</param>
-/// <returns>現在のステートが引数のtypeと一致した場合trueを返す</returns>
-public bool IsMatchCurrentStateType(Type type) 
+/// <param name="type">state type</param>
+/// <returns>return true if current state is type argument</returns>
+public bool IsMatchCurrentStateType(Type type);
 
 /// <summary>
-/// ほとんどIsMatchCurrentStateTypeと同じ
-/// 違いは引数が可変長引数になっていること
+/// almost same with IsMatchCurrentStateType
+/// difference is variable length arguments
 /// </summary>
-/// <param name="types">ステートタイプ</param>
-/// <returns>現在のステートが引数のいずれかのtypeと一致した場合trueを返す</returns>
-public bool IsMatchAnyCurrentStateType(params Type[] types) 
+/// <param name="types">state types</param>
+/// <returns>return true if current state match with any type arguments</returns>
+public bool IsMatchAnyCurrentStateType(params Type[] types);
 ```
 
 ### BaseStateComponent
-#### プロパティ
+#### Properties
 
 ```c#
-// 現在のステートのNode(StateとTransitionが一緒になっているもの)
+// Crrent node that has state and transition
 protected BaseNode baseNode;
 ```
 
-#### メソッド
+#### Methods
 
 ```c#
-public virtual void Init(BaseNode baseNode)
-public virtual async UniTask OnEnter(CancellationToken ct = default)
-public virtual async UniTask OnUpdate(CancellationToken ct = default)
-public virtual async UniTask OnExit(CancellationToken ct = default)
+public virtual void Init(BaseNode baseNode);
+public virtual async UniTask OnEnter(CancellationToken ct = default);
+public virtual async UniTask OnUpdate(CancellationToken ct = default);
+public virtual async UniTask OnExit(CancellationToken ct = default);
 ```
 
 ### BaseNode
 
-#### プロパティ
+#### Properties
 
 ```c#
 public readonly string Id;
@@ -230,35 +245,36 @@ public readonly StateMachine StateMachine;
 public bool IsUpdate { get; private set; } = true;
 ```
 
-#### メソッド
+#### Methods
 
 ```c#
 /// <summary>
-/// いずれかの遷移条件がマッチしているか
+/// is match any condition
 /// </summary>
-/// <returns>ひとつでも遷移条件にマッチしているものがあればtrueを返す</returns>
-public bool IsMatchAnyCondition()
+/// <returns>return true if node has any true conditions</returns>
+public bool IsMatchAnyCondition();
 
 /// <summary>
-/// TriggerNextTransitionによって強制的に遷移する状態になっているか
+/// is exist force transition
 /// </summary>
-/// <returns>ひとつでも強制的に遷移する状態のものがあればtrueを返す</returns>
-public bool IsExistForceTransition()
+/// <returns>return true if node has any force transition</returns>
+public bool IsExistForceTransition();
 
 /// <summary>
-/// Graphエディター上の矢印(Transition)の基底クラスを取得する
+/// get condition
 /// </summary>
-/// <param name="id">Graphエディター上のTransitionId</param>
-public BaseCondition GetCondition(string id)
+/// <param name="id">condition id (transition id named on graph editor)</param>
+/// <returns>base condition</returns>
+public BaseCondition GetCondition(string id);
 
 /// <summary>
-/// Nodeが持っているTransitionのIdをすべて取得する
+/// get transition ids that node has
 /// </summary>
-public IEnumerable<string> GetTransitionIds()
+public IEnumerable<string> GetTransitionIds();
 ```
 
 ### BaseCondition
-#### プロパティ
+#### Properties
 
 ```c#
 public BaseNode NextNode { get; }

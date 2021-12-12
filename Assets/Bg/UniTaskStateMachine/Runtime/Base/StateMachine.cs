@@ -24,6 +24,9 @@ namespace Bg.UniTaskStateMachine
         public State CurrentState { get; private set; } = State.STOP;
         public PlayerLoopTiming LoopTiming = PlayerLoopTiming.Update;
 
+        /// <summary>
+        /// Start StateMachine
+        /// </summary>
         public async void Start()
         {
             if (CurrentState != State.STOP) 
