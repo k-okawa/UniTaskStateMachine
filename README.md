@@ -194,20 +194,20 @@ public void Resume();
 /// <summary>
 /// restart state machine from entry state
 /// </summary>
-public async UniTask ReStart(CancellationToken ct = default) 
+public async UniTask ReStart(CancellationToken ct = default);
 
 /// <summary>
 /// force transition to next state
 /// </summary>
 /// <param name="transitionId">transition id named on graph editor</param>
-public void TriggerNextTransition(string transitionId) 
+public void TriggerNextTransition(string transitionId);
 
 /// <summary>
 /// whether current state is equivalent
 /// </summary>
 /// <param name="type">state type</param>
 /// <returns>return true if current state is type argument</returns>
-public bool IsMatchCurrentStateType(Type type) 
+public bool IsMatchCurrentStateType(Type type);
 
 /// <summary>
 /// almost same with IsMatchCurrentStateType
@@ -215,7 +215,7 @@ public bool IsMatchCurrentStateType(Type type)
 /// </summary>
 /// <param name="types">state types</param>
 /// <returns>return true if current state match with any type arguments</returns>
-public bool IsMatchAnyCurrentStateType(params Type[] types) 
+public bool IsMatchAnyCurrentStateType(params Type[] types);
 ```
 
 ### BaseStateComponent
@@ -229,10 +229,10 @@ protected BaseNode baseNode;
 #### Methods
 
 ```c#
-public virtual void Init(BaseNode baseNode)
-public virtual async UniTask OnEnter(CancellationToken ct = default)
-public virtual async UniTask OnUpdate(CancellationToken ct = default)
-public virtual async UniTask OnExit(CancellationToken ct = default)
+public virtual void Init(BaseNode baseNode);
+public virtual async UniTask OnEnter(CancellationToken ct = default);
+public virtual async UniTask OnUpdate(CancellationToken ct = default);
+public virtual async UniTask OnExit(CancellationToken ct = default);
 ```
 
 ### BaseNode
@@ -252,25 +252,25 @@ public bool IsUpdate { get; private set; } = true;
 /// is match any condition
 /// </summary>
 /// <returns>return true if node has any true conditions</returns>
-public bool IsMatchAnyCondition()
+public bool IsMatchAnyCondition();
 
 /// <summary>
 /// is exist force transition
 /// </summary>
 /// <returns>return true if node has any force transition</returns>
-public bool IsExistForceTransition()
+public bool IsExistForceTransition();
 
 /// <summary>
 /// get condition
 /// </summary>
 /// <param name="id">condition id (transition id named on graph editor)</param>
 /// <returns>base condition</returns>
-public BaseCondition GetCondition(string id)
+public BaseCondition GetCondition(string id);
 
 /// <summary>
 /// get transition ids that node has
 /// </summary>
-public IEnumerable<string> GetTransitionIds()
+public IEnumerable<string> GetTransitionIds();
 ```
 
 ### BaseCondition
