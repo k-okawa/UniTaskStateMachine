@@ -21,9 +21,10 @@ namespace Bg.UniTaskStateMachine.Tests
 
         public class StartState : BaseState
         {
-            public override async UniTask OnEnter(CancellationToken ct = default)
+            public override UniTask OnEnter(CancellationToken ct = default)
             {
                 UnityEngine.Debug.Log("Init Start");
+                return UniTask.CompletedTask;
             }
 
             public override async UniTask OnUpdate(CancellationToken ct = default)
@@ -32,18 +33,20 @@ namespace Bg.UniTaskStateMachine.Tests
                 GameManager.isInit = true;
             }
 
-            public override async UniTask OnExit(CancellationToken ct = default)
+            public override UniTask OnExit(CancellationToken ct = default)
             {
                 UnityEngine.Debug.Log("Init End");
+                return UniTask.CompletedTask;
             }
         }
 
         public class PlayState : BaseState
         {
-            public override async UniTask OnEnter(CancellationToken ct = default)
+            public override UniTask OnEnter(CancellationToken ct = default)
             {
                 UnityEngine.Debug.Log("Play Start");
                 UnityEngine.Debug.Log($"Boss Hp = {GameManager.bossHp}");
+                return UniTask.CompletedTask;
             }
 
             public override async UniTask OnUpdate(CancellationToken ct = default)
@@ -58,18 +61,20 @@ namespace Bg.UniTaskStateMachine.Tests
                 UnityEngine.Debug.Log($"Boss Hp = {GameManager.bossHp}");
             }
 
-            public override async UniTask OnExit(CancellationToken ct = default)
+            public override UniTask OnExit(CancellationToken ct = default)
             {
                 UnityEngine.Debug.Log("Play End");
+                return UniTask.CompletedTask;
             }
         }
 
         public class EndState : BaseState
         {
-            public override async UniTask OnEnter(CancellationToken ct = default)
+            public override UniTask OnEnter(CancellationToken ct = default)
             {
                 UnityEngine.Debug.Log("Game End");
                 baseNode.StateMachine.Stop();
+                return UniTask.CompletedTask;
             }
         }
         

@@ -19,23 +19,25 @@ namespace Bg.UniTaskStateMachine.Tests
         public static float time = 0f;
         
         public class PlayState : BaseState {
-            public override async UniTask OnEnter(CancellationToken ct = default) 
+            public override UniTask OnEnter(CancellationToken ct = default) 
             {
                 time = 0f;
+                return UniTask.CompletedTask;
             }
 
-            public override async UniTask OnUpdate(CancellationToken ct = default) 
+            public override UniTask OnUpdate(CancellationToken ct = default) 
             {
                 time += Time.deltaTime;
                 Debug.Log($"Time:{time}");
                 if (time >= 2f) {
                     baseNode.StateMachine.Stop();
                 }
+                return UniTask.CompletedTask;
             }
 
-            public override async UniTask OnExit(CancellationToken ct = default)
+            public override UniTask OnExit(CancellationToken ct = default)
             {
-
+                return UniTask.CompletedTask;
             }
         }
 

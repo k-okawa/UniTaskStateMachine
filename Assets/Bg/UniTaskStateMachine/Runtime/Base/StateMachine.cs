@@ -55,7 +55,7 @@ namespace Bg.UniTaskStateMachine
                     }
                     CurrentNode = nextNode;
                 }
-                catch (OperationCanceledException e) 
+                catch (OperationCanceledException) 
                 {
                     CurrentState = State.STOP;
                     return;

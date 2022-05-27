@@ -16,19 +16,19 @@ namespace Bg.UniTaskStateMachine
             this.baseNode = baseNode;
         }
         
-        public virtual async UniTask OnEnter(CancellationToken ct = default)
+        public virtual UniTask OnEnter(CancellationToken ct = default)
         {
-            
+            return UniTask.CompletedTask;
         }
 
-        public virtual async UniTask OnUpdate(CancellationToken ct = default)
+        public virtual UniTask OnUpdate(CancellationToken ct = default)
         {
-            
+            return UniTask.CompletedTask;
         }
 
-        public virtual async UniTask OnExit(CancellationToken ct = default)
+        public virtual UniTask OnExit(CancellationToken ct = default)
         {
-            
+            return UniTask.CompletedTask;
         }
     }
 }

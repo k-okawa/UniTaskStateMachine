@@ -9,9 +9,10 @@ namespace Bg.UniTaskStateMachine.Tests.BasicSceneTest
 {
     public class EndState : BaseStateComponent
     {
-        public override async UniTask OnEnter(CancellationToken ct = default)
+        public override UniTask OnEnter(CancellationToken ct = default)
         {
             UnityEngine.Debug.Log("Game End");
+            return UniTask.CompletedTask;
         }
 
         public override UniTask OnUpdate(CancellationToken ct = default)
