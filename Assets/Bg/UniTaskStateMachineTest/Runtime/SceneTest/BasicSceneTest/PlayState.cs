@@ -10,10 +10,11 @@ namespace Bg.UniTaskStateMachine.Tests.BasicSceneTest
 {
     public class PlayState : BaseStateComponent
     {
-        public override async UniTask OnEnter(CancellationToken ct = default)
+        public override UniTask OnEnter(CancellationToken ct = default)
         {
             UnityEngine.Debug.Log("Play Start");
             UnityEngine.Debug.Log($"Boss Hp = {GameManager.bossHp}");
+            return UniTask.CompletedTask;
         }
 
         public override async UniTask OnUpdate(CancellationToken ct = default)
@@ -28,9 +29,10 @@ namespace Bg.UniTaskStateMachine.Tests.BasicSceneTest
             UnityEngine.Debug.Log($"Boss Hp = {GameManager.bossHp}");
         }
 
-        public override async UniTask OnExit(CancellationToken ct = default)
+        public override UniTask OnExit(CancellationToken ct = default)
         {
             UnityEngine.Debug.Log("Play End");
+            return UniTask.CompletedTask;
         }
     }
 }

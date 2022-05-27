@@ -10,8 +10,6 @@ namespace Bg.UniTaskStateMachine.Editor
     [CustomEditor(typeof(TransitionInspectorHelper))]
     public class TransitionInspector : UnityEditor.Editor
     {
-        private readonly int LabelWidth = 80;
-
         private SerializedObject serializedStateMachineObject = null;
 
         private SerializedProperty conditionMethodNameProperty = null;
