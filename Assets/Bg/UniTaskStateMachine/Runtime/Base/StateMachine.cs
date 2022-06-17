@@ -100,7 +100,7 @@ namespace Bg.UniTaskStateMachine
         /// <returns>return true if current state is type argument</returns>
         public bool IsMatchCurrentStateType(Type type) 
         {
-            return CurrentNode.IsMatchState(type);
+            return CurrentNode?.IsMatchState(type) ?? false;
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace Bg.UniTaskStateMachine
         /// <returns>return true if current state match with any type arguments</returns>
         public bool IsMatchAnyCurrentStateType(params Type[] types) 
         {
-            return CurrentNode.IsMatchAnyState(types);
+            return CurrentNode?.IsMatchAnyState(types) ?? false;
         }
 
         /// <summary>
