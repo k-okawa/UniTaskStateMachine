@@ -13,6 +13,7 @@ namespace Bg.UniTaskStateMachine.Editor
             this.elements = new List<ToolbarElement>()
             {
                 new StateMachineField(editorWindow),
+                new TransitionIdConstantGenerator(editorWindow),
                 new ZoomSlider(editorWindow)
             };
         }
