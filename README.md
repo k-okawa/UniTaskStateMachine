@@ -27,7 +27,7 @@ In addition, the state transition method corresponds to the following.
   
 This package also provide an Editor tool, so you can easily create states.
 
-![image](https://user-images.githubusercontent.com/49301086/137613577-d510a77c-0231-4e76-bf0f-a6f16a2ae506.png)
+![image](https://user-images.githubusercontent.com/49301086/183348165-6042c870-ac33-479a-b5fa-af210f345352.png)
 
 
 ## Installation
@@ -60,6 +60,10 @@ https://github.com/k-okawa/UniTaskStateMachine.git?path=Assets/Bg/UniTaskStateMa
 openupm add com.bg.unitaskstatemachine
 ```
 
+### UnityPackage
+
+You can download unity package in [release page](https://github.com/k-okawa/UniTaskStateMachine/releases).
+
 ## How to use
 ### 1.Add StateMachineBehaviour Component
 
@@ -71,7 +75,7 @@ GraphEditorOpen of StateMachineBehaviour added in 1
 
 Or you can open the graph editor with Window / BG UniTaskStateMachine / StateMachineGraph.
 
-![image](https://user-images.githubusercontent.com/49301086/143770686-8efd36c8-35fc-40a5-a1ec-4862a2dda9e3.png)
+![image](https://user-images.githubusercontent.com/49301086/183349573-556b2bfb-968c-40ef-91b9-acde45bf5f65.png)
 
 ### 3.How to add state
 #### 3-1.Add StateBehaviour
@@ -82,6 +86,8 @@ Add a Component that inherits BaseStateComponent to the GameObject to which Stat
 * Do not inherit the class that inherits BaseStateComponent.
 
 * Do not addBaseStateComponent directly.
+
+* Do not add same state component
 
 **Example**
 ```c#
@@ -113,7 +119,7 @@ namespace Bg.UniTaskStateMachine.Tests.BasicSceneTest
 
 Right-click on the Graph editor and select Create State to add State.
 
-![image](https://user-images.githubusercontent.com/49301086/143770989-faa1a688-2ecd-4407-87d7-3e9b2a4c570a.png)
+![image](https://user-images.githubusercontent.com/49301086/183352350-6de6bec5-b304-4a1a-b668-049c6841a9eb.png)
 
 The added class name will be displayed and can be selected.
 
@@ -148,6 +154,20 @@ You must always specify the State to execute first.
 It can be set by right-clicking on the State and selecting Set as Entry.
 
 ![image](https://user-images.githubusercontent.com/49301086/143771406-b0e40166-fd07-4091-8e98-a5cac1ba83f2.png)
+
+### TriggerNextTransition
+
+It is possible to translate state manually by transition id without specify condition method.
+
+Transition id is recommended upper camel case that can use in C# field name.
+
+After define transition id, you can generate transition id constant template code by GenerateTransitionIdConst button.
+
+![image](https://user-images.githubusercontent.com/49301086/183354384-8c33ea1d-53a3-4bae-95f1-2011c0ddd660.png)
+
+Finally, call "StateMachine.TriggerNextTransition(string transitionId)" for manual state transition.
+
+It is able to call with string direct writing, but recommend with readonly string field in the generated template class.
 
 ## API Reference
 ### StateMachine

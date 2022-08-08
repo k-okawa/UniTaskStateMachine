@@ -29,7 +29,7 @@ Editorツールも提供しているので、簡単にステートを組むこ�
 
 (スクリプト上で組むことも可能です)
 
-![image](https://user-images.githubusercontent.com/49301086/137613577-d510a77c-0231-4e76-bf0f-a6f16a2ae506.png)
+![image](https://user-images.githubusercontent.com/49301086/183348165-6042c870-ac33-479a-b5fa-af210f345352.png)
 
 
 ## インストール
@@ -64,6 +64,10 @@ https://github.com/k-okawa/UniTaskStateMachine.git?path=Assets/Bg/UniTaskStateMa
 openupm add com.bg.unitaskstatemachine
 ```
 
+### UnityPackage
+
+[リリースページ](https://github.com/k-okawa/UniTaskStateMachine/releases)からダウンロード可能です。
+
 ## 使い方
 ### 1.StateMachineBehaviour追加
 StateMachineBehaviourをAddComponentします。
@@ -75,7 +79,7 @@ StateMachineBehaviourをAddComponentします。
 
 またはWindow/BG UniTaskStateMachine/StateMachineGraphでグラフエディタを開くことができます。
 
-![image](https://user-images.githubusercontent.com/49301086/143770686-8efd36c8-35fc-40a5-a1ec-4862a2dda9e3.png)
+![image](https://user-images.githubusercontent.com/49301086/183349573-556b2bfb-968c-40ef-91b9-acde45bf5f65.png)
 
 ### 3.State追加方法
 #### 3-1.StateBehaviourを追加
@@ -84,6 +88,8 @@ StateMachineBehaviourがアタッチされているGameObjectにBaseStateCompone
 ※BaseStateComponentを継承したクラスをさらに継承はしないでください。
 
 ※BaseStateComponentを直接AddComponentしないでください。
+
+※同じStateComponentを同じゲームオブジェクトにAddComponentしないでください。
 
 **例**
 ```c#
@@ -115,7 +121,7 @@ namespace Bg.UniTaskStateMachine.Tests.BasicSceneTest
 
 Graphエディタ上で右クリックし、CreateStateでState追加
 
-![image](https://user-images.githubusercontent.com/49301086/143770989-faa1a688-2ecd-4407-87d7-3e9b2a4c570a.png)
+![image](https://user-images.githubusercontent.com/49301086/183352350-6de6bec5-b304-4a1a-b668-049c6841a9eb.png)
 
 追加されているクラス名が表示され選択可能になります。
 
@@ -147,6 +153,20 @@ IsNegativeにチェックを入れることで条件を反対にすることが�
 Stateを右クリックし、Set as Entryを選択することで設定することができます。
 
 ![image](https://user-images.githubusercontent.com/49301086/143771406-b0e40166-fd07-4091-8e98-a5cac1ba83f2.png)
+
+### TriggerNextTransition
+
+トランジションに条件を指定する以外にも、IDを指定してステートを遷移させることが可能です。
+
+トランジションIDはC#のフィールド名で使用可能なアッパーキャメルケースを推奨します。
+
+すべてのトランジションIDを決めた後、GenerateTransitionIdConstボタンを使用して定数のテンプレートコードを生成できます。
+
+![image](https://user-images.githubusercontent.com/49301086/183354384-8c33ea1d-53a3-4bae-95f1-2011c0ddd660.png)
+
+最後に、"StateMachine.TriggerNextTransition(string transitionId)"を呼び出すだけで好きなタイミングでステート遷移が可能です
+
+引数に文字列を直接渡すことができますが、生成されたクラスの読み取り専用のフィールドで渡すことを推奨します。
 
 ## API Reference
 ### StateMachine
