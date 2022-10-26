@@ -2,7 +2,7 @@
 
 [[日本語](https://github.com/k-okawa/UniTaskStateMachine/blob/master/README.ja.md)]
 
-[![openupm](https://img.shields.io/npm/v/com.littlebigfun.addressable-importer?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.littlebigfun.addressable-importer/)
+[![openupm](https://img.shields.io/npm/v/com.bg.unitaskstatemachine?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/com.bg.unitaskstatemachine/)
 
 Since the return value is UniTask as shown below, you can use a state machine that supports asynchronous.
 ```c#
